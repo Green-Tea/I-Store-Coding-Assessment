@@ -1,0 +1,64 @@
+{
+  "rooms": [
+    {
+      "id": "1",
+      "name": "Deluxe Ocean View Suite",
+      "type": "suite",
+      "price": 5500,
+      "currency": "THB",
+      "description": "ห้องสวีทหรูพร้อมวิวทะเลที่สวยงาม ครบครันด้วยสิ่งอำนวยความสะดวกระดับพรีเมียม",
+      "image_url": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800",
+      "images": [
+        "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800",
+        "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800",
+        "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800"
+      ],
+      "capacity": 2,
+      "amenities": ["WiFi", "TV", "Air Conditioning", "Mini Fridge", "Ocean View", "Balcony", "Bathtub"],
+      "size": "65 sqm",
+      "bed_type": "King Bed",
+      "availability": [
+        "2025-07-29", "2025-07-30", "2025-07-31", "2025-08-01", "2025-08-03",
+        "2025-08-04", "2025-08-05", "2025-08-07", "2025-08-08", "2025-08-09"
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Standard Double Room",
+      "type": "standard",
+      "price": 2800,
+      "currency": "THB",
+      "description": "ห้องพักมาตรฐานที่สะดวกสบาย เหมาะสำหรับการพักผ่อนแบบเรียบง่าย",
+      "image_url": "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800",
+      "images": [
+        "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800"
+      ],
+      "capacity": 2,
+      "amenities": ["WiFi", "TV", "Air Conditioning", "Balcony", "Bathtub"],
+      "size": "35 sqm",
+      "bed_type": "Double Bed",
+      "availability": [
+        "2025-07-29", "2025-07-30", "2025-07-31", "2025-08-01", "2025-08-02"
+      ]
+    },
+    {
+      "id": "3",
+      "name": "Family Room",
+      "type": "family",
+      "price": 4200,
+      "currency": "THB",
+      "description": "ห้องพักขนาดใหญ่สำหรับครอบครัว พร้อมเตียงเสริมและพื้นที่นั่งเล่น",
+      "image_url": "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800",
+      "images": [
+        "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800"
+      ],
+      "capacity": 4,
+      "amenities": ["WiFi", "TV", "Air Conditioning", "Garden View", "Mini Fridge"],
+      "size": "55 sqm",
+      "bed_type": "2 Double Beds",
+      "availability": [
+        "2025-07-30", "2025-07-31", "2025-08-02", "2025-08-03", "2025-08-04"
+      ]
+    }
+  ]
+}
