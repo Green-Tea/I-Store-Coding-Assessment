@@ -1,6 +1,6 @@
 ## Run
 ```bash
-cd/booking-system
+cd booking-system
 
 npm install
 
