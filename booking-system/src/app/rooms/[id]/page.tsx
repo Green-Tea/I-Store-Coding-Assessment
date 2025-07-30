@@ -150,7 +150,7 @@ const RoomDetailPage = () => {
             <RoomCard room={room} showButton={false} />
           </div>
 
-          {/* Booking Form - Not Sticky */}
+          {/* Booking Form */}
           <div>
             <BookingSection title="Book this room">
               <table className="w-1/2">
@@ -256,7 +256,7 @@ const RoomDetailPage = () => {
               </button>
             </BookingSection>
 
-            {/* Guest Information Form - Now appears below the booking section */}
+            {/* Guest Information Form */}
             {showBookingForm && (
               <BookingSection title="Guest Information" className="mt-6">
                 <form onSubmit={handleSubmit(handleBooking)} className="space-y-4">

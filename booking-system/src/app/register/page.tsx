@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
-import { Eye, EyeOff, UserPlus, User, Mail, Phone, AlertCircle } from 'lucide-react'
+import { Eye, EyeOff, UserPlus, AlertCircle } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
 
 interface RegisterFormData {

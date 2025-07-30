@@ -42,7 +42,6 @@ const LoginPage = () => {
         </h2>
 
         <div className="bg-white py-8 px-4 shadow-lg rounded-lg sm:px-10">
-          {/* Demo Accounts Info */}
           <div className="border text-center">
             <h3>
               Demo Accounts
