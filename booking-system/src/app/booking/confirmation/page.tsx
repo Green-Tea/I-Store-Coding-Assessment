@@ -21,7 +21,6 @@ const BookingConfirmationPage = () => {
     if (!currentBooking) {
       router.push('/')
     } else {
-      // Simulate loading delay for better UX
       const timer = setTimeout(() => {
         const foundRoom = roomsData.rooms.find(room => room.id === currentBooking.roomId)
         setRoomDetails(foundRoom || null)
@@ -51,15 +50,15 @@ const BookingConfirmationPage = () => {
           className="btn-secondary flex items-center gap-2"
         >
           <ArrowLeft size={16} />
-          <span>กลับไปแก้ไขข้อมูล</span>
+          <span>Back</span>
         </button>
 
         <h1 className="text-xl font-semibold">
-          ยืนยันการจอง
+          Confirm booking
         </h1>
       </div>
       <p className="text-gray-600">
-        กรุณาตรวจสอบข้อมูลการจองให้ถูกต้องก่อนดำเนินการชำระเงิน
+        Please check your booking information before proceeding with payment.
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -69,9 +68,6 @@ const BookingConfirmationPage = () => {
           {isLoading ? (
             <div className="bg-white rounded-lg shadow-md p-6">
               <div className="animate-pulse">
-                <div className="h-6 w-1/3 bg-gray-200 rounded mb-4"></div>
-                <div className="h-4 w-full bg-gray-200 rounded mb-2"></div>
-                <div className="h-4 w-2/3 bg-gray-200 rounded mb-6"></div>
                 <div className="flex space-x-4 mb-4">
                   <div className="h-4 w-1/4 bg-gray-200 rounded"></div>
                   <div className="h-4 w-1/4 bg-gray-200 rounded"></div>
@@ -90,24 +86,24 @@ const BookingConfirmationPage = () => {
                 showButton={false}
               />
               <BookingSection
-                title='ข้อมูลการจอง'
+                title='Booking information'
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                   <div className="flex items-center text-gray-600">
                     <Calendar className="w-4 h-4 mr-2" />
-                    <span>เช็คอิน: {formatDate(currentBooking.checkIn)}</span>
+                    <span>Check-in: {formatDate(currentBooking.checkIn)}</span>
                   </div>
                   <div className="flex items-center text-gray-600">
                     <Calendar className="w-4 h-4 mr-2" />
-                    <span>เช็คเอาท์: {formatDate(currentBooking.checkOut)}</span>
+                    <span>Check-out: {formatDate(currentBooking.checkOut)}</span>
                   </div>
                   <div className="flex items-center text-gray-600">
                     <Users className="w-4 h-4 mr-2" />
-                    <span>ผู้เข้าพัก: {currentBooking.guests} คน</span>
+                    <span>Guests: {currentBooking.guests} guests</span>
                   </div>
                   <div className="flex items-center text-gray-600">
                     <Calendar className="w-4 h-4 mr-2" />
-                    <span>จำนวนคืน: {currentBooking.nights} คืน</span>
+                    <span>Nights Staying: {currentBooking.nights} nights</span>
                   </div>
                 </div>
               </BookingSection>
@@ -126,7 +122,7 @@ const BookingConfirmationPage = () => {
 
           {/* Guest Information */}
           <BookingSection
-            title='ข้อมูลผู้เข้าพัก'>
+            title='Guest Information'>
             <div className='flex'>
               <User />
               <span>
@@ -152,20 +148,17 @@ const BookingConfirmationPage = () => {
 
           {/* Booking Terms */}
           <BookingSection
-            title='เงื่อนไขการจอง'>
+            title='Booking conditions'>
             <div className="bg-white rounded-lg shadow-md p-6">
               <div className="space-y-3 text-sm text-gray-600">
                 <p>
-                  เช็คอินได้ตั้งแต่เวลา 15:00 น. และเช็คเอาท์ภายในเวลา 12:00 น.
+                  Check-in is from 3:00 PM and check-out is until 12:00 PM.
                 </p>
                 <p>
-                  สามารถยกเลิกการจองได้ฟรีก่อนวันเช็คอิน 24 ชั่วโมง
+                  Free cancellation is available up to 24 hours prior to check-in.
                 </p>
                 <p>
-                  กรุณานำบัตรประชาชนหรือหนังสือเดินทางมาแสดงตอนเช็คอิน
-                </p>
-                <p>
-                  ห้ามสูบบุหรี่ในห้องพัก และห้ามนำสัตว์เลี้ยงเข้าพัก
+                  Please present your ID card or passport upon check-in.
                 </p>
               </div>
             </div>
@@ -175,38 +168,38 @@ const BookingConfirmationPage = () => {
         </div>
 
         {/* Payment Summary */}
-        <BookingSection title='สรุปการจอง'>
+        <BookingSection title='Booking Summary'>
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-md p-6 sticky top-8">
 
               <div className="space-y-4 mb-6">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">ห้องพัก</span>
+                  <span className="text-gray-600">Room Type</span>
                   <span className="font-medium">{currentBooking.roomName}</span>
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">วันที่เข้าพัก</span>
+                  <span className="text-gray-600">Check-in Date</span>
                   <span className="font-medium">
                     {formatDate(currentBooking.checkIn)}
                   </span>
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">วันที่ออก</span>
+                  <span className="text-gray-600">Check-out Date</span>
                   <span className="font-medium">
                     {formatDate(currentBooking.checkOut)}
                   </span>
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">จำนวนคืน</span>
-                  <span className="font-medium">{currentBooking.nights} คืน</span>
+                  <span className="text-gray-600">Total Nights</span>
+                  <span className="font-medium">{currentBooking.nights} nights</span>
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">ผู้เข้าพัก</span>
-                  <span className="font-medium">{currentBooking.guests} คน</span>
+                  <span className="text-gray-600">Total Guests</span>
+                  <span className="font-medium">{currentBooking.guests} guests</span>
                 </div>
 
                 <hr />
@@ -221,7 +214,7 @@ const BookingConfirmationPage = () => {
                 <hr />
 
                 <div className="flex justify-between items-center text-lg">
-                  <span className="font-semibold">ราคารวมทั้งหมด</span>
+                  <span className="font-semibold">Total Price</span>
                   <span className="font-bold text-primary-600">
                     {formatPrice(currentBooking.totalPrice)}
                   </span>
@@ -234,7 +227,7 @@ const BookingConfirmationPage = () => {
                   href="/booking/payment"
                   className="btn-primary text-center block"
                 >
-                  ดำเนินการชำระเงิน
+                  Proceed with payment
                 </Link>
 
               </div>

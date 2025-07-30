@@ -12,7 +12,6 @@ const HomePage = () => {
   const router = useRouter()
   const [rooms, setRooms] = useState<Room[]>([])
   const [searchTerm, setSearchTerm] = useState('')
-  const [showSuggestions, setShowSuggestions] = useState(false)
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([])
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 6000])
   const [searchResults, setSearchResults] = useState<Room[]>([])
@@ -59,7 +58,6 @@ const HomePage = () => {
 
   const handleSearch = () => {
     setHasSearched(true)
-    setShowSuggestions(false)
 
     const exactMatch = rooms.find(room =>
       room.name.toLowerCase() === searchTerm.toLowerCase()
@@ -102,10 +100,7 @@ const HomePage = () => {
           value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value)
-            setShowSuggestions(true)
           }}
-          onFocus={() => setShowSuggestions(true)}
-          onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
           className="input-field w-1/4"
         />
         <button
@@ -134,31 +129,40 @@ const HomePage = () => {
           </div>
         </div>
 
-        <div>
+        <div className="flex flex-col items-center justify-center gap-4 w-full">
           <h3 className='text-center'>
             Price Range: {formatPrice(priceRange[0])} - {formatPrice(priceRange[1])}
           </h3>
-          <div className="flex items-center space-x-4 max-w-md mx-auto w-1/3">
-            <span className="text-sm text-gray-600">{formatPrice(0)}</span>
-            <input
-              type="range"
-              min="0"
-              max="6000"
-              step="100"
-              value={priceRange[0]}
-              onChange={(e) => setPriceRange([parseInt(e.target.value), priceRange[1]])}
-              className="flex-1"
-            />
-            <input
-              type="range"
-              min="0"
-              max="6000"
-              step="100"
-              value={priceRange[1]}
-              onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
-              className="flex-1"
-            />
-            <span className="text-sm text-gray-600">{formatPrice(6000)}</span>
+
+          <div className="flex items-center max-w-lg gap-4">
+            <span className="text-sm text-gray-600 w-20 text-right">
+              {formatPrice(0)}
+            </span>
+
+            <div className="flex-1 space-y-2">
+              <div className="flex items-center gap-4">
+                <input
+                  type="range"
+                  min="0"
+                  max="6000"
+                  step="100"
+                  value={priceRange[0]}
+                  onChange={(e) => setPriceRange([parseInt(e.target.value), priceRange[1]])}
+                />
+                <input
+                  type="range"
+                  min="0"
+                  max="6000"
+                  step="100"
+                  value={priceRange[1]}
+                  onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
+                />
+              </div>
+            </div>
+
+            <span className="text-sm text-gray-600 w-20 text-left">
+              {formatPrice(6000)}
+            </span>
           </div>
         </div>
       </div>

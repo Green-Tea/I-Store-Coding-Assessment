@@ -5,6 +5,7 @@
 /* Base styles */
 html {
   scroll-behavior: smooth;
+  background-color: rgb(224, 236, 233);
 }
 
 /* Component styles */

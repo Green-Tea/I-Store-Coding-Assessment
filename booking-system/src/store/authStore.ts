@@ -22,7 +22,6 @@ export interface AuthState {
 
 // Mock authentication service
 const authenticateUser = async (email: string, password: string): Promise<User | null> => {
-  // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 1000))
   
   const users = [
@@ -44,7 +43,6 @@ const registerUser = async (userData: Omit<User, 'id'> & { password: string }): 
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 1000))
   
-  // In real app, check if email already exists
   const newUser: User = {
     id: Date.now().toString(),
     email: userData.email,

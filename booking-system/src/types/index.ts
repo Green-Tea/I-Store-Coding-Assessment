@@ -54,5 +54,32 @@ export interface BookingData {
   guests: number
   nights: number
   totalPrice: number
-  guestInfo: BookingFormData
+  guestInfo: {
+    firstName: string
+    lastName: string
+    email: string
+    phone: string
+  }
+  userId: string | null
+}
+
+export interface PaymentData {
+  cardNumber: string
+  cvv: string
+  expiryDate: string
+  cardHolder: string
+}
+
+export interface BookingState {
+  currentBooking: BookingData | null
+  paymentData: PaymentData | null
+  bookingHistory: BookingData[]
+  isLoading: boolean
+  
+  setBookingData: (data: BookingData) => void
+  setPaymentData: (data: PaymentData) => void
+  setLoading: (loading: boolean) => void
+  addToHistory: (booking: BookingData) => void
+  clearCurrentBooking: () => void
+  reset: () => void
 }

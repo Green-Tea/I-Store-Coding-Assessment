@@ -6,7 +6,7 @@
       "type": "suite",
       "price": 5500,
       "currency": "THB",
-      "description": "ห้องสวีทหรูพร้อมวิวทะเลที่สวยงาม ครบครันด้วยสิ่งอำนวยความสะดวกระดับพรีเมียม",
+      "description": "Luxurious suites with stunning sea views, fully equipped with premium amenities.",
       "image_url": "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800",
       "images": [
         "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800",
@@ -28,7 +28,7 @@
       "type": "standard",
       "price": 2800,
       "currency": "THB",
-      "description": "ห้องพักมาตรฐานที่สะดวกสบาย เหมาะสำหรับการพักผ่อนแบบเรียบง่าย",
+      "description": "Comfortable standard rooms, perfect for a simple getaway.",
       "image_url": "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800",
       "images": [
         "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800"
@@ -47,7 +47,7 @@
       "type": "family",
       "price": 4200,
       "currency": "THB",
-      "description": "ห้องพักขนาดใหญ่สำหรับครอบครัว พร้อมเตียงเสริมและพื้นที่นั่งเล่น",
+      "description": "Large family room with extra bed and sitting area.",
       "image_url": "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800",
       "images": [
         "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800"

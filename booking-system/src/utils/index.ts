@@ -1,4 +1,4 @@
-import { format, parseISO, differenceInDays, isAfter, isBefore, isEqual } from 'date-fns'
+import { format, parseISO, differenceInDays, isBefore, isEqual } from 'date-fns'
 import { PaymentFormData, Room, SearchFilters } from '@/types'
 
 export const formatPrice = (price: number, currency = 'THB'): string => {
@@ -94,12 +94,9 @@ export const generateBookingId = (): string => {
   return `BK${timestamp}${random}`
 }
 
-// Simulate payment processing with random success/failure
 export const simulatePayment = async (data: PaymentFormData): Promise<{ success: boolean; transactionId?: string; error?: string }> => {
-  // Simulate network delay
   await new Promise(resolve => setTimeout(resolve, 2000 + Math.random() * 2000))
   
-  // 80% success rate as specified in requirements
   const isSuccess = Math.random() < 0.8
   
   if (isSuccess) {

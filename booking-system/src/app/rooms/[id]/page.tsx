@@ -6,15 +6,16 @@ import Image from 'next/image'
 import DatePicker from 'react-datepicker'
 import { useForm } from 'react-hook-form'
 import {
-  ArrowLeft, ChevronLeft, ChevronRight
+  ArrowLeft
 } from 'lucide-react'
 import { Room, BookingFormData } from '@/types'
-import { formatPrice, calculateNights, isRoomAvailable, formatDate } from '@/utils'
+import { formatPrice, calculateNights, isRoomAvailable } from '@/utils'
 import { useBookingStore } from '@/store/bookingStore'
 import RoomCard from '@/components/ui/RoomCard'
 import BookingSection from '@/components/ui/BookingSection'
 import roomsData from '@/data/rooms.json'
 import 'react-datepicker/dist/react-datepicker.css'
+import { useAuthStore } from '@/store/authStore'
 
 const RoomDetailPage = () => {
   const params = useParams()
@@ -24,13 +25,13 @@ const RoomDetailPage = () => {
 
   const [room, setRoom] = useState<Room | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [checkIn, setCheckIn] = useState<Date | null>(null)
   const [checkOut, setCheckOut] = useState<Date | null>(null)
   const [guests, setGuests] = useState(2)
   const [showBookingForm, setShowBookingForm] = useState(false)
 
   const { setBookingData } = useBookingStore()
+  const { user } = useAuthStore()
 
   const { register, handleSubmit, formState: { errors } } = useForm<BookingFormData>()
 
@@ -71,7 +72,8 @@ const RoomDetailPage = () => {
       guests,
       nights,
       totalPrice: room.price * nights,
-      guestInfo: formData
+      guestInfo: formData,
+      userId: user?.id || null
     }
 
     setBookingData(bookingData)
@@ -87,18 +89,6 @@ const RoomDetailPage = () => {
   ) : 0
 
   const totalPrice = room && nights ? room.price * nights : 0
-
-  const nextImage = () => {
-    if (room && room.images.length > 1) {
-      setCurrentImageIndex((prev) => (prev + 1) % room.images.length)
-    }
-  }
-
-  const prevImage = () => {
-    if (room && room.images.length > 1) {
-      setCurrentImageIndex((prev) => (prev - 1 + room.images.length) % room.images.length)
-    }
-  }
 
   const isDateUnavailable = (date: Date) => {
     if (!room) return true
@@ -288,7 +278,7 @@ const RoomDetailPage = () => {
                       )}
                     </div>
                   </div>
-                  <br/>
+                  <br />
 
                   {/* Last Name */}
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-start">
@@ -308,7 +298,7 @@ const RoomDetailPage = () => {
                       )}
                     </div>
                   </div>
-                  <br/>
+                  <br />
 
                   {/* Email */}
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-start">
@@ -335,7 +325,7 @@ const RoomDetailPage = () => {
                       )}
                     </div>
                   </div>
-                  <br/>
+                  <br />
 
                   {/* Phone */}
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-start">
@@ -362,7 +352,7 @@ const RoomDetailPage = () => {
                     </div>
                   </div>
 
-                  <br/>
+                  <br />
 
                   <div className="flex space-x-4 pt-2">
                     <button

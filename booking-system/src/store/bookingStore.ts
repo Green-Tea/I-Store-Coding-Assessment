@@ -1,42 +1,6 @@
+import { BookingData, BookingState, PaymentData } from '@/types'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-
-export interface BookingData {
-  roomId: string
-  roomName: string
-  checkIn: string
-  checkOut: string
-  guests: number
-  nights: number
-  totalPrice: number
-  guestInfo: {
-    firstName: string
-    lastName: string
-    email: string
-    phone: string
-  }
-}
-
-export interface PaymentData {
-  cardNumber: string
-  cvv: string
-  expiryDate: string
-  cardHolder: string
-}
-
-export interface BookingState {
-  currentBooking: BookingData | null
-  paymentData: PaymentData | null
-  bookingHistory: BookingData[]
-  isLoading: boolean
-  
-  setBookingData: (data: BookingData) => void
-  setPaymentData: (data: PaymentData) => void
-  setLoading: (loading: boolean) => void
-  addToHistory: (booking: BookingData) => void
-  clearCurrentBooking: () => void
-  reset: () => void
-}
 
 export const useBookingStore = create<BookingState>()(
   persist(
@@ -59,16 +23,21 @@ export const useBookingStore = create<BookingState>()(
       },
 
       addToHistory: (booking: BookingData) => {
-        const history = get().bookingHistory
-        set({ 
-          bookingHistory: [booking, ...history],
-          currentBooking: null,
-          paymentData: null
-        })
+        const history = get().bookingHistory;
+        const exists = history.some(
+          item => item.roomId === booking.roomId &&
+            item.checkIn === booking.checkIn &&
+            item.checkOut === booking.checkOut
+        );
+        if (!exists) {
+          set({
+            bookingHistory: [booking, ...history],
+          });
+        }
       },
 
       clearCurrentBooking: () => {
-        set({ 
+        set({
           currentBooking: null,
           paymentData: null
         })

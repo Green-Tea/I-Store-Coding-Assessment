@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
-import { Eye, EyeOff, UserPlus, User, Mail, Phone, Lock, AlertCircle } from 'lucide-react'
+import { Eye, EyeOff, UserPlus, User, Mail, Phone, AlertCircle } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
 
 interface RegisterFormData {
@@ -46,34 +46,21 @@ const RegisterPage = () => {
     if (success) {
       router.push('/')
     } else {
-      setRegisterError('ไม่สามารถสมัครสมาชิกได้ กรุณาลองใหม่อีกครั้ง')
+      setRegisterError('Registration failed, please try again.')
     }
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="w-1/2">
         <div className="flex justify-center">
-          <div className="w-12 h-12 bg-primary-600 rounded-lg flex items-center justify-center">
-            <UserPlus className="w-7 h-7 text-white" />
-          </div>
+          <UserPlus />
         </div>
-        <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
-          สมัครสมาชิก
+        <h2 className="text-center">
+          Register
         </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
-          หรือ{' '}
-          <Link
-            href="/login"
-            className="font-medium text-primary-600 hover:text-primary-500 transition-colors duration-200"
-          >
-            เข้าสู่ระบบ
-          </Link>
-        </p>
-      </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow-lg sm:rounded-lg sm:px-10">
+        <div className="bg-white py-8 px-4 shadow-lg rounded-lg sm:px-10">
           {registerError && (
             <div className="mb-6 p-3 bg-red-50 border border-red-200 rounded-lg">
               <div className="flex items-center">
@@ -84,233 +71,213 @@ const RegisterPage = () => {
           )}
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-                  ชื่อ
-                </label>
-                <div className="mt-1 relative">
+            <div>
+              <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 text-center">
+                First Name
+              </label>
+              <div className="mt-1 flex justify-center">
+                <div className="relative w-80">
                   <input
                     {...register('firstName', {
-                      required: 'กรุณากรอกชื่อ',
+                      required: 'Please enter your first name',
                       minLength: {
                         value: 2,
-                        message: 'ชื่อต้องมีความยาวอย่างน้อย 2 ตัวอักษร'
+                        message: 'First name must be at least 2 characters'
                       }
                     })}
                     type="text"
-                    className="input-field pr-10"
-                    placeholder="ชื่อ"
+                    className="input-field pr-10 w-full"
+                    placeholder="John"
                   />
-                  <User className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 </div>
-                {errors.firstName && (
-                  <p className="error-text">{errors.firstName.message}</p>
-                )}
               </div>
+              {errors.firstName && (
+                <p className="error-text text-center">{errors.firstName.message}</p>
+              )}
+            </div>
 
-              <div>
-                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-                  นามสกุล
-                </label>
-                <div className="mt-1 relative">
+            <div>
+              <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 text-center">
+                Surname
+              </label>
+              <div className="mt-1 flex justify-center">
+                <div className="relative w-80">
                   <input
                     {...register('lastName', {
-                      required: 'กรุณากรอกนามสกุล',
+                      required: 'Please enter your surname',
                       minLength: {
                         value: 2,
-                        message: 'นามสกุลต้องมีความยาวอย่างน้อย 2 ตัวอักษร'
+                        message: 'Surname must be at least 2 characters'
                       }
                     })}
                     type="text"
-                    className="input-field pr-10"
-                    placeholder="นามสกุล"
+                    className="input-field pr-10 w-full"
+                    placeholder="Doe"
                   />
-                  <User className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 </div>
-                {errors.lastName && (
-                  <p className="error-text">{errors.lastName.message}</p>
-                )}
               </div>
+              {errors.lastName && (
+                <p className="error-text text-center">{errors.lastName.message}</p>
+              )}
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                อีเมล
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 text-center">
+                Email
               </label>
-              <div className="mt-1 relative">
-                <input
-                  {...register('email', {
-                    required: 'กรุณากรอกอีเมล',
-                    pattern: {
-                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                      message: 'รูปแบบอีเมลไม่ถูกต้อง'
-                    }
-                  })}
-                  type="email"
-                  className="input-field pr-10"
-                  placeholder="อีเมลของคุณ"
-                />
-                <Mail className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <div className="mt-1 flex justify-center">
+                <div className="relative w-80">
+                  <input
+                    {...register('email', {
+                      required: 'Please enter your email address',
+                      pattern: {
+                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                        message: 'Invalid email address'
+                      }
+                    })}
+                    type="email"
+                    className="input-field pr-10 w-full"
+                    placeholder="example@email.com"
+                  />
+                </div>
               </div>
               {errors.email && (
-                <p className="error-text">{errors.email.message}</p>
+                <p className="error-text text-center">{errors.email.message}</p>
               )}
             </div>
 
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                เบอร์โทรศัพท์
+              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 text-center">
+                Phone Number
               </label>
-              <div className="mt-1 relative">
-                <input
-                  {...register('phone', {
-                    required: 'กรุณากรอกเบอร์โทรศัพท์',
-                    pattern: {
-                      value: /^[0-9-+().\s]{10,}$/,
-                      message: 'รูปแบบเบอร์โทรไม่ถูกต้อง'
-                    }
-                  })}
-                  type="tel"
-                  className="input-field pr-10"
-                  placeholder="เบอร์โทรศัพท์"
-                />
-                <Phone className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <div className="mt-1 flex justify-center">
+                <div className="relative w-80">
+                  <input
+                    {...register('phone', {
+                      required: 'Please enter your phone number',
+                      pattern: {
+                        value: /^[0-9-+().\s]{10,}$/,
+                        message: 'Invalid phone number'
+                      }
+                    })}
+                    type="tel"
+                    className="input-field pr-10 w-full"
+                    placeholder="1234567890"
+                  />
+                </div>
               </div>
               {errors.phone && (
-                <p className="error-text">{errors.phone.message}</p>
+                <p className="error-text text-center">{errors.phone.message}</p>
               )}
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                รหัสผ่าน
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 text-center">
+                Password
               </label>
-              <div className="mt-1 relative">
-                <input
-                  {...register('password', {
-                    required: 'กรุณากรอกรหัสผ่าน',
-                    minLength: {
-                      value: 6,
-                      message: 'รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร'
-                    }
-                  })}
-                  type={showPassword ? 'text' : 'password'}
-                  className="input-field pr-10"
-                  placeholder="รหัสผ่าน"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors duration-200"
-                >
-                  {showPassword ? (
-                    <EyeOff className="w-4 h-4" />
-                  ) : (
-                    <Eye className="w-4 h-4" />
-                  )}
-                </button>
+              <div className="mt-1 flex justify-center">
+                <div className="relative w-80">
+                  <input
+                    {...register('password', {
+                      required: 'Please enter your password',
+                      minLength: {
+                        value: 6,
+                        message: 'Password must be at least 6 characters.'
+                      }
+                    })}
+                    type={showPassword ? 'text' : 'password'}
+                    className="input-field pr-10 w-full"
+                    placeholder="Password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-transparent border-0"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
+                  </button>
+                </div>
               </div>
               {errors.password && (
-                <p className="error-text">{errors.password.message}</p>
+                <p className="error-text text-center">{errors.password.message}</p>
               )}
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                ยืนยันรหัสผ่าน
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 text-center">
+                Confirm Password
               </label>
-              <div className="mt-1 relative">
-                <input
-                  {...register('confirmPassword', {
-                    required: 'กรุณายืนยันรหัสผ่าน',
-                    validate: (value) => value === password || 'รหัสผ่านไม่ตรงกัน'
-                  })}
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  className="input-field pr-10"
-                  placeholder="ยืนยันรหัสผ่าน"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors duration-200"
-                >
-                  {showConfirmPassword ? (
-                    <EyeOff className="w-4 h-4" />
-                  ) : (
-                    <Eye className="w-4 h-4" />
-                  )}
-                </button>
+              <div className="mt-1 flex justify-center">
+                <div className="relative w-80">
+                  <input
+                    {...register('confirmPassword', {
+                      required: 'Please confirm your password',
+                      validate: (value) => value === password || 'Passwords do not match'
+                    })}
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    className="input-field pr-10 w-full"
+                    placeholder="Confirm Password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-transparent border-0"
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
+                  </button>
+                </div>
               </div>
               {errors.confirmPassword && (
-                <p className="error-text">{errors.confirmPassword.message}</p>
+                <p className="error-text text-center">{errors.confirmPassword.message}</p>
               )}
             </div>
 
-            <div className="flex items-center">
-              <input
-                id="agree-terms"
-                name="agree-terms"
-                type="checkbox"
-                required
-                className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-              />
-              <label htmlFor="agree-terms" className="ml-2 block text-sm text-gray-900">
-                ฉันยอมรับ{' '}
-                <a href="#" className="text-primary-600 hover:text-primary-500">
-                  ข้อกำหนดการใช้งาน
-                </a>{' '}
-                และ{' '}
-                <a href="#" className="text-primary-600 hover:text-primary-500">
-                  นโยบายความเป็นส่วนตัว
-                </a>
-              </label>
-            </div>
+            <br />
 
-            <div>
+            <div className="flex justify-center">
               <button
                 type="submit"
                 disabled={isLoading}
-                className="btn-primary w-full py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn-primary w-80"
               >
                 {isLoading ? (
                   <div className="flex items-center justify-center">
                     <div className="loading-spinner w-5 h-5 mr-2"></div>
-                    กำลังสมัครสมาชิก...
+                    Registering User...
                   </div>
                 ) : (
-                  'สมัครสมาชิก'
+                  'Register'
                 )}
               </button>
             </div>
           </form>
 
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">หรือ</span>
-              </div>
-            </div>
-
-            <div className="mt-6">
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-600">
+              Have an account?{' '}
               <Link
                 href="/login"
-                className="w-full flex justify-center py-3 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                className="font-medium text-primary-600 hover:text-primary-500 transition-colors duration-200"
               >
-                เข้าสู่ระบบ
+                Login
               </Link>
-            </div>
+            </p>
           </div>
 
-          <div className="mt-6 text-center">
+          <div className="mt-4 text-center">
             <Link
               href="/"
               className="text-sm text-gray-600 hover:text-primary-600 transition-colors duration-200"
             >
-              ← กลับหน้าหลัก
+              ← Go Home
             </Link>
           </div>
         </div>

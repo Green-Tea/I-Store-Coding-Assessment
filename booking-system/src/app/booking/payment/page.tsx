@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
-import { CreditCard, Lock, ArrowLeft, AlertCircle, CheckCircle } from 'lucide-react'
+import { ArrowLeft, AlertCircle, CheckCircle } from 'lucide-react'
 import { useBookingStore } from '@/store/bookingStore'
 import { PaymentFormData } from '@/types'
 import { formatPrice, simulatePayment, validateCVV, validateExpiryDate } from '@/utils'
@@ -11,7 +11,7 @@ import BookingSection from '@/components/ui/BookingSection'
 
 const PaymentPage = () => {
   const router = useRouter()
-  const { currentBooking, setPaymentData, setLoading, isLoading } = useBookingStore()
+  const { currentBooking, setPaymentData, setLoading } = useBookingStore()
   const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'success' | 'error'>('idle')
   const [paymentError, setPaymentError] = useState<string>('')
 
@@ -52,32 +52,30 @@ const PaymentPage = () => {
   }
 
   const onSubmit = async (data: PaymentFormData) => {
-    if (!currentBooking) return
+    if (!currentBooking) return;
 
-    setPaymentStatus('processing')
-    setLoading(true)
-    setPaymentError('')
+    setPaymentStatus('processing');
+    setLoading(true);
+    setPaymentError('');
 
     try {
-      const result = await simulatePayment(data)
+      const result = await simulatePayment(data);
 
       if (result.success) {
-        setPaymentData(data)
-        setPaymentStatus('success')
+        setPaymentData(data);
+        setPaymentStatus('success');
+        setLoading(false);
 
-        // Redirect to receipt page with transaction ID
-        setTimeout(() => {
-          router.push(`/booking/receipt?transactionId=${result.transactionId}`)
-        }, 2000)
+        router.push(`/booking/receipt?transactionId=${result.transactionId}`);
       } else {
-        setPaymentStatus('error')
-        setPaymentError(result.error || 'การชำระเงินล้มเหลว')
+        setPaymentStatus('error');
+        setPaymentError(result.error || 'Payment failed');
       }
     } catch (error) {
-      setPaymentStatus('error')
-      setPaymentError('เกิดข้อผิดพลาดในระบบ กรุณาลองใหม่อีกครั้ง')
+      setPaymentStatus('error');
+      setPaymentError('System error occurred');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
@@ -86,7 +84,7 @@ const PaymentPage = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="loading-spinner w-8 h-8 mx-auto mb-4"></div>
-          <p className="text-gray-600">กำลังโหลด...</p>
+          <p className="text-gray-600">Loading...</p>
         </div>
       </div>
     )
@@ -102,17 +100,17 @@ const PaymentPage = () => {
             className="btn-secondary flex items-center gap-2"
           >
             <ArrowLeft size={16} />
-            <span>กลับไปแก้ไขข้อมูล</span>
+            <span>Back</span>
           </button>
 
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            ชำระเงิน
+            Payment
           </h1>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3">
           {/* Order Summary */}
-          <BookingSection title='สรุปคำสั่งซื้อ'>
+          <BookingSection title='Order Summary'>
             <div className="lg:col-span-1">
               <div className="bg-white rounded-lg shadow-md p-6 sticky">
                 <div className="space-y-3 mb-6">
@@ -121,10 +119,10 @@ const PaymentPage = () => {
                       {currentBooking.roomName}
                     </h3>
                     <p className="text-sm text-gray-600">
-                      {currentBooking.checkIn} ถึง {currentBooking.checkOut}
+                      {currentBooking.checkIn} to {currentBooking.checkOut}
                     </p>
                     <p className="text-sm text-gray-600">
-                      {currentBooking.nights} คืน, {currentBooking.guests} คน
+                      {currentBooking.nights} nights, {currentBooking.guests} guests
                     </p>
                   </div>
 
@@ -132,19 +130,19 @@ const PaymentPage = () => {
 
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">ค่าที่พัก</span>
+                      <span className="text-gray-600">Room Price</span>
                       <span>{formatPrice(currentBooking.totalPrice)}</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">ภาษีและค่าธรรมเนียม</span>
-                      <span>รวมแล้ว</span>
+                      <span className="text-gray-600">Taxes and fees</span>
+                      <span>Included</span>
                     </div>
                   </div>
 
                   <hr />
 
                   <div className="flex justify-between items-center text-lg font-bold">
-                    <span>ยอดรวมทั้งหมด</span>
+                    <span>Total</span>
                     <span className="text-primary-600">
                       {formatPrice(currentBooking.totalPrice)}
                     </span>
@@ -154,7 +152,7 @@ const PaymentPage = () => {
             </div>
           </BookingSection>
 
-          <BookingSection title='ข้อมูลบัตรเครดิต'>
+          <BookingSection title='Credit Card Information'>
             {/* Payment Form */}
             <div className="lg:col-span-2">
               <div className="bg-white rounded-lg shadow-md p-6">
@@ -163,7 +161,7 @@ const PaymentPage = () => {
                   <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
                     <div className="flex items-center">
                       <div className="loading-spinner w-5 h-5 mr-3"></div>
-                      <p className="text-blue-700">กำลังดำเนินการชำระเงิน...</p>
+                      <p className="text-blue-700">Processing Payment...</p>
                     </div>
                   </div>
                 )}
@@ -172,7 +170,7 @@ const PaymentPage = () => {
                   <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
                     <div className="flex items-center">
                       <CheckCircle className="w-5 h-5 text-green-600 mr-3" />
-                      <p className="text-green-700">ชำระเงินสำเร็จ! กำลังเปลี่ยนหน้าไปยังใบเสร็จ...</p>
+                      <p className="text-green-700">Payment completed! Navigating to receipt page...</p>
                     </div>
                   </div>
                 )}
@@ -182,7 +180,7 @@ const PaymentPage = () => {
                     <div className="flex items-center">
                       <AlertCircle className="w-5 h-5 text-red-600 mr-3" />
                       <div>
-                        <p className="text-red-700 font-medium">การชำระเงินล้มเหลว</p>
+                        <p className="text-red-700 font-medium">Payment Failed</p>
                         <p className="text-red-600 text-sm mt-1">{paymentError}</p>
                       </div>
                     </div>
@@ -193,26 +191,28 @@ const PaymentPage = () => {
                   {/* Card Number */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      หมายเลขบัตร *
+                      Card Number *
                     </label>
-                    <div className="relative">
-                      <input
-                        {...register('cardNumber', {
-                          required: 'กรุณากรอกหมายเลขบัตร',
-                          validate: (value) => {
-                            const cleaned = value.replace(/\s/g, '')
-                            return cleaned
-                          }
-                        })}
-                        className="input-field pr-16"
-                        placeholder="1234 5678 9012 3456"
-                        maxLength={19}
-                        onChange={(e) => {
-                          e.target.value = formatCardNumber(e.target.value)
-                        }}
-                      />
+                    <div>
+                      <div>
+                        <input
+                          {...register('cardNumber', {
+                            required: 'Please enter card number',
+                            validate: (value) => {
+                              const cleaned = value.replace(/\s/g, '')
+                              return (cleaned.length >= 13 && cleaned.length <= 16) || 'Invalid Card Number'
+                            }
+                          })}
+                          className="input-field"
+                          placeholder="1234 5678 9012 3456"
+                          maxLength={19}
+                          onChange={(e) => {
+                            e.target.value = formatCardNumber(e.target.value)
+                          }}
+                        />
+                      </div>
                       {cardNumber && (
-                        <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm font-medium text-gray-600">
+                        <div>
                           {getCardType(cardNumber.replace(/\s/g, ''))}
                         </div>
                       )}
@@ -226,12 +226,12 @@ const PaymentPage = () => {
                     {/* Expiry Date */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        วันหมดอายุ *
+                        Expiry Date *
                       </label>
                       <input
                         {...register('expiryDate', {
-                          required: 'กรุณากรอกวันหมดอายุ',
-                          validate: (value) => validateExpiryDate(value) || 'วันหมดอายุไม่ถูกต้อง'
+                          required: 'Please enter expiry date',
+                          validate: (value) => validateExpiryDate(value) || 'Invalid Date'
                         })}
                         className="input-field"
                         placeholder="MM/YY"
@@ -256,8 +256,8 @@ const PaymentPage = () => {
                       </label>
                       <input
                         {...register('cvv', {
-                          required: 'กรุณากรอก CVV',
-                          validate: (value) => validateCVV(value) || 'CVV ไม่ถูกต้อง'
+                          required: 'Please enter CVV',
+                          validate: (value) => validateCVV(value) || 'Incorrect CVV'
                         })}
                         className="input-field"
                         placeholder="123"
@@ -275,14 +275,14 @@ const PaymentPage = () => {
                   {/* Card Holder Name */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      ชื่อผู้ถือบัตร *
+                      Card Holder *
                     </label>
                     <input
                       {...register('cardHolder', {
-                        required: 'กรุณากรอกชื่อผู้ถือบัตร',
+                        required: 'Please enter card holder',
                         minLength: {
                           value: 2,
-                          message: 'ชื่อผู้ถือบัตรต้องมีความยาวอย่างน้อย 2 ตัวอักษร'
+                          message: 'Cardholder name must be at least 2 characters long.'
                         }
                       })}
                       className="input-field uppercase"
@@ -306,18 +306,16 @@ const PaymentPage = () => {
                     {paymentStatus === 'processing' ? (
                       <div className="flex items-center justify-center">
                         <div className="loading-spinner w-5 h-5 mr-2"></div>
-                        กำลังดำเนินการ...
+                        Loading...
                       </div>
                     ) : (
-                      `ชำระเงิน ${formatPrice(currentBooking.totalPrice)}`
+                      `Payment ${formatPrice(currentBooking.totalPrice)}`
                     )}
                   </button>
                 </form>
               </div>
             </div>
           </BookingSection>
-
-
         </div>
       </div>
     </div>
