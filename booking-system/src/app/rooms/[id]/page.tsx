@@ -1,3 +1,4 @@
+// src/app/rooms/[id]/page.tsx - Updated with Bootstrap carousel
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -6,7 +7,9 @@ import Image from 'next/image'
 import DatePicker from 'react-datepicker'
 import { useForm } from 'react-hook-form'
 import {
-  ArrowLeft
+  ArrowLeft,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react'
 import { Room, BookingFormData } from '@/types'
 import { formatPrice, calculateNights, isRoomAvailable } from '@/utils'
@@ -29,6 +32,7 @@ const RoomDetailPage = () => {
   const [checkOut, setCheckOut] = useState<Date | null>(null)
   const [guests, setGuests] = useState(2)
   const [showBookingForm, setShowBookingForm] = useState(false)
+  const [activeImageIndex, setActiveImageIndex] = useState(0)
 
   const { setBookingData } = useBookingStore()
   const { user } = useAuthStore()
@@ -83,10 +87,11 @@ const RoomDetailPage = () => {
   const canBook = room && checkIn && checkOut &&
     isRoomAvailable(room, checkIn.toISOString().split('T')[0], checkOut.toISOString().split('T')[0])
 
-  const nights = checkIn && checkOut ? calculateNights(
-    checkIn.toISOString().split('T')[0],
-    checkOut.toISOString().split('T')[0]
-  ) : 0
+  const nights = checkIn && checkOut ?
+    calculateNights(
+      checkIn.toISOString().split('T')[0],
+      checkOut.toISOString().split('T')[0]
+    ) : 0
 
   const totalPrice = room && nights ? room.price * nights : 0
 
@@ -98,10 +103,12 @@ const RoomDetailPage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-vh-100 d-flex align-items-center justify-content-center">
         <div className="text-center">
-          <div className="loading-spinner w-8 h-8 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading room details...</p>
+          <div className="spinner-border text-primary mb-3" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <p className="text-muted">Loading room details...</p>
         </div>
       </div>
     )
@@ -109,15 +116,15 @@ const RoomDetailPage = () => {
 
   if (!room) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-vh-100 d-flex align-items-center justify-content-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Room not found</h1>
-          <p className="text-gray-600 mb-6">The room you&apos;re looking for may not exist or has been removed</p>
+          <h1 className="h2 mb-3">Room not found</h1>
+          <p className="text-muted mb-4">The room you&apos;re looking for may not exist or has been removed</p>
           <button
             onClick={() => router.back()}
-            className="btn-primary flex items-center space-x-2"
+            className="btn btn-primary d-flex align-items-center gap-2"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft size={16} />
             <span>Go back</span>
           </button>
         </div>
@@ -126,131 +133,164 @@ const RoomDetailPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="space-y-6">
-            {/* Image Gallery */}
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="image-gallery-container">
-                {room.images.map((image, index) => (
-                  <div key={index} className="gallery-image">
-                    <Image
-                      src={image}
-                      alt={`${room.name} ${index + 1}`}
-                      fill
-                      className="object-cover"
-                    />
+    <div className="min-vh-100 bg-light py-4">
+      <div className="container">
+        <div className="row g-4">
+          <div className="col-lg-6">
+            {/* Bootstrap Carousel for Images */}
+            {room.images && room.images.length > 0 && (
+              <div id="roomCarousel" className="carousel slide mb-4" data-bs-ride="carousel">
+                {/* Carousel Indicators */}
+                {room.images.length > 1 && (
+                  <div className="carousel-indicators">
+                    {room.images.map((_, index) => (
+                      <button
+                        key={index}
+                        type="button"
+                        data-bs-target="#roomCarousel"
+                        data-bs-slide-to={index}
+                        className={index === activeImageIndex ? 'active' : ''}
+                        aria-current={index === activeImageIndex ? 'true' : 'false'}
+                        aria-label={`Slide ${index + 1}`}
+                        onClick={() => setActiveImageIndex(index)}
+                      />
+                    ))}
                   </div>
-                ))}
+                )}
+
+                {/* Carousel Images */}
+                <div className="carousel-inner rounded-3 overflow-hidden">
+                  {room.images.map((image, index) => (
+                    <div
+                      key={index}
+                      className={`carousel-item ${index === activeImageIndex ? 'active' : ''}`}
+                    >
+                      <div style={{ position: 'relative', height: '400px' }}>
+                        <Image
+                          src={image}
+                          alt={`${room.name} ${index + 1}`}
+                          fill
+                          className="object-fit-cover"
+                          priority={index === 0}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Carousel Controls */}
+                {room.images.length > 1 && (
+                  <>
+                    <button
+                      className="carousel-control-prev"
+                      type="button"
+                      onClick={() => {
+                        const newIndex = activeImageIndex === 0 ? room.images.length - 1 : activeImageIndex - 1
+                        setActiveImageIndex(newIndex)
+                      }}
+                    >
+                      <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span className="visually-hidden">Previous</span>
+                    </button>
+                    <button
+                      className="carousel-control-next"
+                      type="button"
+                      onClick={() => {
+                        const newIndex = activeImageIndex === room.images.length - 1 ? 0 : activeImageIndex + 1
+                        setActiveImageIndex(newIndex)
+                      }}
+                    >
+                      <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span className="visually-hidden">Next</span>
+                    </button>
+                  </>
+                )}
               </div>
-            </div>
+            )}
 
             {/* Room Details Card */}
             <RoomCard room={room} showButton={false} />
           </div>
 
           {/* Booking Form */}
-          <div>
+          <div className="col-lg-6">
             <BookingSection title="Book this room">
-              <table className="w-1/2">
-                <tbody>
-                  <tr>
-                    <td className="py-2 pr-8">
-                      <label className="block text-sm font-medium text-gray-700">
-                        Check-in Date
-                      </label>
-                    </td>
-                    <td className="py-2">
-                      <DatePicker
-                        selected={checkIn}
-                        onChange={(date) => setCheckIn(date)}
-                        placeholderText="Select check-in date"
-                        className="input-field"
-                        dateFormat="dd/MM/yyyy"
-                        minDate={new Date()}
-                        filterDate={(date) => !isDateUnavailable(date)}
-                      />
-                    </td>
-                  </tr>
+              {/* Check-in and Check-out */}
+              <div className="row mb-3">
+                <div className="col-md-6">
+                  <label className="form-label">Check-in Date</label>
+                  <DatePicker
+                    selected={checkIn}
+                    onChange={(date) => setCheckIn(date)}
+                    minDate={new Date()}
+                    filterDate={(date) => !isDateUnavailable(date)}
+                    dateFormat="dd/MM/yyyy"
+                    className="form-control"
+                    placeholderText="Select date"
+                  />
+                </div>
+                <div className="col-md-6">
+                  <label className="form-label">Check-out Date</label>
+                  <DatePicker
+                    selected={checkOut}
+                    onChange={(date) => setCheckOut(date)}
+                    minDate={checkIn || new Date()}
+                    filterDate={(date) => !isDateUnavailable(date)}
+                    dateFormat="dd/MM/yyyy"
+                    className="form-control"
+                    placeholderText="Select date"
+                  />
+                </div>
+              </div>
 
-                  <tr>
-                    <td className="py-2 pr-8">
-                      <label className="block text-sm font-medium text-gray-700">
-                        Check-out Date
-                      </label>
-                    </td>
-                    <td className="py-2">
-                      <DatePicker
-                        selected={checkOut}
-                        onChange={(date) => setCheckOut(date)}
-                        placeholderText="Select check-out date"
-                        className="input-field"
-                        dateFormat="dd/MM/yyyy"
-                        minDate={checkIn ? new Date(checkIn.getTime() + 24 * 60 * 60 * 1000) : new Date()}
-                        filterDate={(date) => !isDateUnavailable(date)}
-                      />
-                    </td>
-                  </tr>
+              {/* Guests */}
+              <div className="mb-3">
+                <label className="form-label">Guests</label>
+                <select
+                  className="form-select"
+                  value={guests}
+                  onChange={(e) => setGuests(parseInt(e.target.value))}
+                >
+                  {[...Array(room.capacity)].map((_, i) => (
+                    <option key={i + 1} value={i + 1}>
+                      {i + 1} {i === 0 ? 'Guest' : 'Guests'}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-                  <tr>
-                    <td className="py-2 pr-8">
-                      <label className="block text-sm font-medium text-gray-700">
-                        Number of Guests
-                      </label>
-                    </td>
-                    <td className="py-2">
-                      <select
-                        value={guests}
-                        onChange={(e) => setGuests(parseInt(e.target.value))}
-                        className="input-field w-full"
-                      >
-                        {Array.from({ length: room.capacity }, (_, i) => i + 1).map(num => (
-                          <option key={num} value={num}>{num} guest{num > 1 ? 's' : ''}</option>
-                        ))}
-                      </select>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-
-              {/* Price Summary */}
+              {/* Booking Summary */}
               {checkIn && checkOut && (
-                <div className="p-4 bg-gray-50 rounded-lg mt-4 w-1/2">
-                  <br />
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-gray-600">
-                      {formatPrice(room.price)} × {nights} night{nights > 1 ? 's' : ''}
-                    </span>
-                    <span className="font-semibold">
-                      {formatPrice(totalPrice)}
-                    </span>
+                <div className="bg-light p-3 rounded mb-3">
+                  <div className="d-flex justify-content-between mb-2">
+                    <span>Price per night:</span>
+                    <span>{formatPrice(room.price)}</span>
                   </div>
-                  <div className="border-t pt-2">
-                    <div className="flex justify-between items-center">
-                      <span className="font-semibold">Total</span>
-                      <span className="text-xl font-bold text-blue-600">
-                        {formatPrice(totalPrice)}
-                      </span>
-                    </div>
-                    <br />
+                  <div className="d-flex justify-content-between mb-2">
+                    <span>Number of nights:</span>
+                    <span>{nights}</span>
+                  </div>
+                  <hr />
+                  <div className="d-flex justify-content-between fw-bold">
+                    <span>Total:</span>
+                    <span>{formatPrice(totalPrice)}</span>
                   </div>
                 </div>
               )}
 
               {/* Availability Warning */}
               {checkIn && checkOut && !canBook && (
-                <div className="p-3 bg-red-50 border border-red-200 rounded-lg mt-4 w-1/2">
-                  <p className="text-red-700 text-sm">
-                    Room not available for selected dates. Please choose different dates.
-                  </p>
+                <div className="alert alert-warning" role="alert">
+                  <strong>Room not available for selected dates.</strong>
+                  <br />
+                  Please choose different dates.
                 </div>
               )}
 
               <button
                 onClick={() => setShowBookingForm(!showBookingForm)}
                 disabled={!canBook}
-                className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed mt-4"
+                className="btn btn-primary w-100"
               >
                 {canBook ? (showBookingForm ? 'Hide Form' : 'Book Now') : 'Select dates first'}
               </button>
@@ -258,113 +298,103 @@ const RoomDetailPage = () => {
 
             {/* Guest Information Form */}
             {showBookingForm && (
-              <BookingSection title="Guest Information" className="mt-6">
-                <form onSubmit={handleSubmit(handleBooking)} className="space-y-4">
-                  {/* First Name */}
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-start">
-                    <div className="md:col-span-1">
-                      <label className="block text-sm font-medium text-gray-700">
-                        First Name*
+              <BookingSection title="Guest Information" className="mt-3">
+                <form onSubmit={handleSubmit(handleBooking)}>
+                  <div className="row">
+                    {/* First Name */}
+                    <div className="col-md-6 mb-3">
+                      <label className="form-label">
+                        First Name <span className="text-danger">*</span>
                       </label>
-                    </div>
-                    <div className="md:col-span-3">
                       <input
                         {...register('firstName', { required: 'Please enter first name' })}
-                        className="input-field w-1/2"
+                        className={`form-control ${errors.firstName ? 'is-invalid' : ''}`}
                         placeholder="First Name"
                       />
                       {errors.firstName && (
-                        <p className="error-text mt-1">{errors.firstName.message}</p>
+                        <div className="invalid-feedback">
+                          {errors.firstName.message}
+                        </div>
                       )}
                     </div>
-                  </div>
-                  <br />
 
-                  {/* Last Name */}
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-start">
-                    <div className="md:col-span-1">
-                      <label className="block text-sm font-medium text-gray-700">
-                        Last Name*
+                    {/* Last Name */}
+                    <div className="col-md-6 mb-3">
+                      <label className="form-label">
+                        Last Name <span className="text-danger">*</span>
                       </label>
-                    </div>
-                    <div className="md:col-span-3">
                       <input
                         {...register('lastName', { required: 'Please enter last name' })}
-                        className="input-field w-1/2"
+                        className={`form-control ${errors.lastName ? 'is-invalid' : ''}`}
                         placeholder="Last Name"
                       />
                       {errors.lastName && (
-                        <p className="error-text mt-1">{errors.lastName.message}</p>
+                        <div className="invalid-feedback">
+                          {errors.lastName.message}
+                        </div>
                       )}
                     </div>
                   </div>
-                  <br />
 
                   {/* Email */}
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-start">
-                    <div className="md:col-span-1">
-                      <label className="block text-sm font-medium text-gray-700">
-                        Email*
-                      </label>
-                    </div>
-                    <div className="md:col-span-3">
-                      <input
-                        type="email"
-                        {...register('email', {
-                          required: 'Please enter email',
-                          pattern: {
-                            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                            message: 'Invalid email format'
-                          }
-                        })}
-                        className="input-field w-1/2"
-                        placeholder="Email"
-                      />
-                      {errors.email && (
-                        <p className="error-text mt-1">{errors.email.message}</p>
-                      )}
-                    </div>
+                  <div className="mb-3">
+                    <label className="form-label">
+                      Email <span className="text-danger">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      {...register('email', {
+                        required: 'Please enter email',
+                        pattern: {
+                          value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                          message: 'Invalid email format'
+                        }
+                      })}
+                      className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+                      placeholder="Email"
+                    />
+                    {errors.email && (
+                      <div className="invalid-feedback">
+                        {errors.email.message}
+                      </div>
+                    )}
                   </div>
-                  <br />
 
                   {/* Phone */}
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-start">
-                    <div className="md:col-span-1">
-                      <label className="block text-sm font-medium text-gray-700">
-                        Phone*
-                      </label>
-                    </div>
-                    <div className="md:col-span-3">
-                      <input
-                        {...register('phone', {
-                          required: 'Please enter phone number',
-                          pattern: {
-                            value: /^[0-9-+().\s]+$/,
-                            message: 'Invalid phone format'
-                          }
-                        })}
-                        className="input-field w-1/2"
-                        placeholder="Phone Number"
-                      />
-                      {errors.phone && (
-                        <p className="error-text mt-1">{errors.phone.message}</p>
-                      )}
-                    </div>
+                  <div className="mb-3">
+                    <label className="form-label">
+                      Phone <span className="text-danger">*</span>
+                    </label>
+                    <input
+                      {...register('phone', {
+                        required: 'Please enter phone number',
+                        pattern: {
+                          value: /^[0-9-+().\s]+$/,
+                          message: 'Invalid phone format'
+                        }
+                      })}
+                      className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
+                      placeholder="Phone Number"
+                    />
+                    {errors.phone && (
+                      <div className="invalid-feedback">
+                        {errors.phone.message}
+                      </div>
+                    )}
                   </div>
 
-                  <br />
-
-                  <div className="flex space-x-4 pt-2">
+                  {/* Form Actions */}
+                  <div className="d-flex gap-2">
                     <button
                       type="button"
                       onClick={() => setShowBookingForm(false)}
-                      className="btn-secondary"
+                      className="btn btn-secondary"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="btn-primary"
+                      className="btn btn-primary"
                     >
                       Proceed to Payment
                     </button>

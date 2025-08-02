@@ -1,55 +1,39 @@
+// src/app/booking/receipt/page.tsx - Bootstrap version with improved spacing
 'use client'
 
 import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { CheckCircle, Download, Home, Calendar, Mail, Phone, User } from 'lucide-react'
+import { CheckCircle, Download, Home, Calendar, Users, CreditCard, Phone, Mail } from 'lucide-react'
 import { useBookingStore } from '@/store/bookingStore'
-import { formatPrice, formatDate, generateBookingId } from '@/utils'
-import { useAuthStore } from '@/store/authStore'
+import { formatPrice, formatDate } from '@/utils'
 
 const ReceiptPage = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const transactionId = searchParams.get('transactionId')
-
-  const { currentBooking, addToHistory, clearCurrentBooking } = useBookingStore()
-  const [bookingId, setBookingId] = useState<string>('')
-  const [isProcessed, setIsProcessed] = useState(false)
-  const { user } = useAuthStore();
+  const { currentBooking, clearCurrentBooking } = useBookingStore()
+  const [transactionId, setTransactionId] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!currentBooking || !transactionId) {
-      router.push('/');
-      return;
+    const id = searchParams.get('transactionId')
+    setTransactionId(id)
+
+    if (!currentBooking || !id) {
+      router.push('/')
     }
+  }, [currentBooking, router, searchParams])
 
-    if (!isProcessed) {
-      const newBookingId = generateBookingId();
-      setBookingId(newBookingId);
-
-      if (user?.id) {
-        const bookingWithUser = {
-          ...currentBooking,
-          userId: user.id,
-          bookingId: newBookingId
-        };
-        addToHistory(bookingWithUser);
-      }
-
-      setIsProcessed(true);
-    }
-  }, [currentBooking, transactionId, router, isProcessed, user, addToHistory]);
+  const bookingId = `BK${Date.now()}`
 
   const handleDownloadReceipt = () => {
     const receiptContent = `
-      Booking Receipt
+      HOTEL BOOKING RECEIPT
+      ====================
       
-      Booking ID: ${bookingId}
       Transaction ID: ${transactionId}
-      Booking Date: ${formatDate(new Date().toISOString().split('T')[0])}
+      Booking ID: ${bookingId}
+      Date: ${new Date().toLocaleDateString()}
       
-      Room Details:
-      ${currentBooking?.roomName}
+      Room: ${currentBooking?.roomName}
       Check-in: ${currentBooking ? formatDate(currentBooking.checkIn) : ''}
       Check-out: ${currentBooking ? formatDate(currentBooking.checkOut) : ''}
       Nights: ${currentBooking?.nights} nights
@@ -73,181 +57,168 @@ const ReceiptPage = () => {
   }
 
   const handleGoHome = () => {
-    clearCurrentBooking();
-    router.push('/');
-  };
+    clearCurrentBooking()
+    router.push('/')
+  }
 
   if (!currentBooking || !transactionId) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-vh-100 d-flex align-items-center justify-content-center">
         <div className="text-center">
-          <div className="loading-spinner w-8 h-8 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading booking information...</p>
+          <div className="spinner-border text-primary mb-3" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <p className="text-muted">Loading booking information...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-vh-100 bg-light py-4">
+      <div className="container">
         {/* Success Header */}
-        <div className="text-center mb-8">
-          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <CheckCircle className="w-12 h-12" />
+        <div className="text-center mb-5">
+          <div className="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style={{ width: '80px', height: '80px' }}>
+            <CheckCircle size={48} className="text-success" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Payment Successful!
-          </h1>
-          <p className="text-gray-600 text-lg">
-            Your booking has been confirmed
+          <h1 className="display-5 fw-bold mb-2">Payment Successful!</h1>
+          <p className="lead text-muted">
+            Your booking has been confirmed. We&apos;ve sent a confirmation email to {currentBooking.guestInfo.email}
           </p>
         </div>
 
-        {/* Receipt Content */}
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          {/* Receipt Header */}
-          <div className="bg-primary-600 text-white p-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <h2 className="text-2xl font-bold mb-2">Booking Receipt</h2>
-                <p className="text-primary-100">Hotel Booking System</p>
+        {/* Receipt Card */}
+        <div className="row justify-content-center mb-4">
+          <div className="col-lg-8">
+            <div className="card shadow-sm">
+              <div className="card-header bg-primary text-white">
+                <h5 className="mb-0">Booking Receipt</h5>
               </div>
-              <div className="text-right">
-                <p className="text-sm text-primary-100">Issued Date</p>
-                <p className="font-semibold">{formatDate(new Date().toISOString().split('T')[0])}</p>
-              </div>
-            </div>
-          </div>
+              <div className="card-body">
+                {/* Transaction Details */}
+                <div className="row g-3 mb-4">
+                  <div className="col-md-6">
+                    <small className="text-muted">Transaction ID</small>
+                    <p className="fw-semibold mb-0">{transactionId}</p>
+                  </div>
+                  <div className="col-md-6">
+                    <small className="text-muted">Booking ID</small>
+                    <p className="fw-semibold mb-0">{bookingId}</p>
+                  </div>
+                </div>
 
-          <div className="p-6 space-y-8">
-            {/* Booking Information */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <h3 className="text-lg font-semibold mb-3 flex items-center">
-                  <Calendar className="w-5 h-5 mr-2 text-primary-600" />
-                  Booking Details
-                </h3>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Booking ID:</span>
-                    <span className="font-medium">{bookingId}</span>
+                <hr className="my-4" />
+
+                {/* Room Details */}
+                <h6 className="fw-semibold mb-3">Room Details</h6>
+                <div className="bg-light rounded p-3 mb-4">
+                  <h5 className="mb-3">{currentBooking.roomName}</h5>
+                  <div className="row g-3">
+                    <div className="col-6">
+                      <div className="d-flex align-items-center gap-2">
+                        <Calendar size={18} className="text-primary" />
+                        <div>
+                          <small className="text-muted d-block">Check-in</small>
+                          <span>{formatDate(currentBooking.checkIn)}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-6">
+                      <div className="d-flex align-items-center gap-2">
+                        <Calendar size={18} className="text-primary" />
+                        <div>
+                          <small className="text-muted d-block">Check-out</small>
+                          <span>{formatDate(currentBooking.checkOut)}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-6">
+                      <div className="d-flex align-items-center gap-2">
+                        <Users size={18} className="text-primary" />
+                        <span>{currentBooking.guests} Guests</span>
+                      </div>
+                    </div>
+                    <div className="col-6">
+                      <div className="d-flex align-items-center gap-2">
+                        <CreditCard size={18} className="text-primary" />
+                        <span className="fw-bold text-primary">{formatPrice(currentBooking.totalPrice)}</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Transaction ID:</span>
-                    <span className="font-medium">{transactionId}</span>
+                </div>
+
+                {/* Guest Information */}
+                <h6 className="fw-semibold mb-3">Guest Information</h6>
+                <div className="bg-light rounded p-3 mb-4">
+                  <div className="row g-3">
+                    <div className="col-md-6">
+                      <strong>{currentBooking.guestInfo.firstName} {currentBooking.guestInfo.lastName}</strong>
+                    </div>
+                    <div className="col-md-6">
+                      <div className="d-flex align-items-center gap-2">
+                        <Phone size={16} className="text-muted" />
+                        <span>{currentBooking.guestInfo.phone}</span>
+                      </div>
+                    </div>
+                    <div className="col-12">
+                      <div className="d-flex align-items-center gap-2">
+                        <Mail size={16} className="text-muted" />
+                        <span>{currentBooking.guestInfo.email}</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Room:</span>
-                    <span className="font-medium">{currentBooking.roomName}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Check-in:</span>
-                    <span className="font-medium">{formatDate(currentBooking.checkIn)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Check-out:</span>
-                    <span className="font-medium">{formatDate(currentBooking.checkOut)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Nights:</span>
-                    <span className="font-medium">{currentBooking.nights} nights</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Guests:</span>
-                    <span className="font-medium">{currentBooking.guests} people</span>
-                  </div>
+                </div>
+
+                {/* Important Information */}
+                <h6 className="fw-semibold mb-3">Important Information</h6>
+                <div className="alert alert-info mb-0">
+                  <ul className="mb-0 ps-3">
+                    <li>Check-in available from 3:00 PM</li>
+                    <li>Check-out by 12:00 PM</li>
+                    <li>Free cancellation up to 24 hours before check-in</li>
+                    <li>Contact us at 02-123-4567 for any questions</li>
+                  </ul>
                 </div>
               </div>
 
-              <div>
-                <h3 className="text-lg font-semibold mb-3 flex items-center">
-                  <User className="w-5 h-5 mr-2 text-primary-600" />
-                  Guest Information
-                </h3>
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center">
-                    <User className="w-4 h-4 mr-2 text-gray-400" />
-                    <span>{currentBooking.guestInfo.firstName} {currentBooking.guestInfo.lastName}</span>
+              {/* Action Buttons */}
+              <div className="card-footer bg-white">
+                <div className="row g-2">
+                  <div className="col-sm-6">
+                    <button
+                      onClick={handleDownloadReceipt}
+                      className="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center gap-2"
+                    >
+                      <Download size={18} />
+                      <span>Download Receipt</span>
+                    </button>
                   </div>
-                  <div className="flex items-center">
-                    <Mail className="w-4 h-4 mr-2 text-gray-400" />
-                    <span>{currentBooking.guestInfo.email}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <Phone className="w-4 h-4 mr-2 text-gray-400" />
-                    <span>{currentBooking.guestInfo.phone}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Payment Summary */}
-            <div className="border-t pt-6">
-              <h3 className="text-lg font-semibold mb-4">Payment Summary</h3>
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Room ({currentBooking.nights} nights)</span>
-                    <span>{formatPrice(currentBooking.totalPrice)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Taxes and fees</span>
-                    <span>Included</span>
-                  </div>
-                  <hr className="my-2" />
-                  <div className="flex justify-between items-center text-lg font-bold">
-                    <span>Total Paid</span>
-                    <span className="text-primary-600">{formatPrice(currentBooking.totalPrice)}</span>
+                  <div className="col-sm-6">
+                    <button
+                      onClick={handleGoHome}
+                      className="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-2"
+                    >
+                      <Home size={18} />
+                      <span>Return Home</span>
+                    </button>
                   </div>
                 </div>
               </div>
-            </div>
-
-            {/* Important Information */}
-            <div className="border-t pt-6">
-              <h3 className="text-lg font-semibold mb-4">Important Information</h3>
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <div className="space-y-2 text-sm text-blue-800">
-                  <p>• Check-in available from 3:00 PM</p>
-                  <p>• Check-out by 12:00 PM</p>
-                  <p>• Free cancellation up to 24 hours before check-in</p>
-                  <p>• Contact us at 02-123-4567 for any questions</p>
-                </div>
-              </div>
-            </div>
-
-            <br />
-
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 pt-6">
-              <button
-                onClick={handleDownloadReceipt}
-                className="btn-outline flex items-center justify-center space-x-2 flex-1"
-              >
-                <Download className="w-4 h-4" />
-                <span>Download Receipt</span>
-              </button>
-
-              <button
-                onClick={handleGoHome}
-                className="btn-primary flex items-center justify-center space-x-2 flex-1"
-              >
-                <Home className="w-4 h-4" />
-                <span>Return Home</span>
-              </button>
             </div>
           </div>
         </div>
 
         {/* Thank You Message */}
-        <div className="text-center mt-8 p-6 bg-white rounded-lg shadow-md">
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">
-            Thank you for choosing us!
-          </h3>
-          <p className="text-gray-600">
-            We hope you enjoy your stay. Please don&apos;t hesitate to contact us if you need any assistance.
-          </p>
+        <div className="text-center">
+          <div className="card border-0 shadow-sm">
+            <div className="card-body py-4">
+              <h3 className="h4 mb-2">Thank you for choosing us!</h3>
+              <p className="text-muted mb-0">
+                We hope you enjoy your stay. Please don&apos;t hesitate to contact us if you need any assistance.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

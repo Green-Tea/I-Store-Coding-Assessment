@@ -1,9 +1,10 @@
+// src/app/booking/confirmation/page.tsx - Bootstrap version with vertical gaps
 'use client'
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Calendar, Users, MapPin, User, Mail, Phone, ArrowLeft } from 'lucide-react'
+import { Calendar, Users, MapPin, User, Mail, Phone, ArrowLeft, CreditCard, Clock } from 'lucide-react'
 import { useBookingStore } from '@/store/bookingStore'
 import { formatPrice, formatDate } from '@/utils'
 import RoomCard from '@/components/ui/RoomCard'
@@ -14,7 +15,7 @@ import BookingSection from '@/components/ui/BookingSection'
 const BookingConfirmationPage = () => {
   const router = useRouter()
   const { currentBooking } = useBookingStore()
-  const [roomDetails, setRoomDetails] = useState<Room | null>(null);
+  const [roomDetails, setRoomDetails] = useState<Room | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -32,210 +33,191 @@ const BookingConfirmationPage = () => {
 
   if (!currentBooking) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-vh-100 d-flex align-items-center justify-content-center">
         <div className="text-center">
-          <div className="loading-spinner w-8 h-8 mx-auto mb-4"></div>
-          <p className="text-gray-600">กำลังโหลด...</p>
+          <div className="spinner-border text-primary mb-3" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <p className="text-muted">Loading...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 py-8">
+    <div className="container py-4">
       {/* Header */}
-      <div className="flex items-center gap-4 mb-4">
+      <div className="d-flex align-items-center gap-3 mb-4">
         <button
           onClick={() => router.back()}
-          className="btn-secondary flex items-center gap-2"
+          className="btn btn-outline-secondary d-flex align-items-center gap-2"
         >
           <ArrowLeft size={16} />
           <span>Back</span>
         </button>
 
-        <h1 className="text-xl font-semibold">
-          Confirm booking
-        </h1>
+        <h1 className="h3 mb-0">Confirm Booking</h1>
       </div>
-      <p className="text-gray-600">
-        Please check your booking information before proceeding with payment.
+      
+      <p className="text-muted mb-4">
+        Please review your booking information before proceeding with payment.
       </p>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Booking Details */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Room Information */}
-          {isLoading ? (
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <div className="animate-pulse">
-                <div className="flex space-x-4 mb-4">
-                  <div className="h-4 w-1/4 bg-gray-200 rounded"></div>
-                  <div className="h-4 w-1/4 bg-gray-200 rounded"></div>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {[...Array(4)].map((_, i) => (
-                    <div key={i} className="h-6 w-16 bg-gray-200 rounded-full"></div>
-                  ))}
+      <div className="row g-4">
+        {/* Left Column - Booking Details */}
+        <div className="col-lg-8">
+          {/* Room Information Section */}
+          <div className="mb-4">
+            {isLoading ? (
+              <div className="card">
+                <div className="card-body">
+                  <div className="placeholder-glow">
+                    <div className="placeholder col-4 mb-3"></div>
+                    <div className="placeholder col-6"></div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ) : roomDetails ? (
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <RoomCard
-                room={roomDetails}
-                showButton={false}
-              />
-              <BookingSection
-                title='Booking information'
-              >
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                  <div className="flex items-center text-gray-600">
-                    <Calendar className="w-4 h-4 mr-2" />
-                    <span>Check-in: {formatDate(currentBooking.checkIn)}</span>
-                  </div>
-                  <div className="flex items-center text-gray-600">
-                    <Calendar className="w-4 h-4 mr-2" />
-                    <span>Check-out: {formatDate(currentBooking.checkOut)}</span>
-                  </div>
-                  <div className="flex items-center text-gray-600">
-                    <Users className="w-4 h-4 mr-2" />
-                    <span>Guests: {currentBooking.guests} guests</span>
-                  </div>
-                  <div className="flex items-center text-gray-600">
-                    <Calendar className="w-4 h-4 mr-2" />
-                    <span>Nights Staying: {currentBooking.nights} nights</span>
-                  </div>
+            ) : roomDetails ? (
+              <RoomCard room={roomDetails} showButton={false} />
+            ) : (
+              <div className="alert alert-warning">
+                Room details not found
+              </div>
+            )}
+          </div>
+
+          {/* Guest Information Section */}
+          <BookingSection title="Guest Information" className="mb-4">
+            <div className="row g-3">
+              <div className="col-md-6">
+                <div className="d-flex align-items-center gap-2 text-muted">
+                  <User size={18} />
+                  <span className="fw-semibold">Name:</span>
                 </div>
-              </BookingSection>
-            </div>
-
-
-          ) : (
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-semibold mb-4 flex items-center">
-                <MapPin className="w-5 h-5 mr-2 text-primary-600" />
-                ข้อมูลห้องพัก
-              </h2>
-              <p className="text-gray-600">ไม่พบข้อมูลห้องพัก</p>
-            </div>
-          )}
-
-          {/* Guest Information */}
-          <BookingSection
-            title='Guest Information'>
-            <div className='flex'>
-              <User />
-              <span>
-                {currentBooking.guestInfo.firstName} {currentBooking.guestInfo.lastName}
-              </span>
-            </div>
-
-            <div className='flex'>
-              <Mail />
-              <span>
-                {currentBooking.guestInfo.email}
-              </span>
-            </div>
-
-            <div className="flex">
-              <Phone />
-              <span>
-                {currentBooking.guestInfo.phone}
-              </span>
+                <p className="ms-4 mb-0">
+                  {currentBooking.guestInfo.firstName} {currentBooking.guestInfo.lastName}
+                </p>
+              </div>
+              
+              <div className="col-md-6">
+                <div className="d-flex align-items-center gap-2 text-muted">
+                  <Phone size={18} />
+                  <span className="fw-semibold">Phone:</span>
+                </div>
+                <p className="ms-4 mb-0">{currentBooking.guestInfo.phone}</p>
+              </div>
+              
+              <div className="col-12">
+                <div className="d-flex align-items-center gap-2 text-muted">
+                  <Mail size={18} />
+                  <span className="fw-semibold">Email:</span>
+                </div>
+                <p className="ms-4 mb-0">{currentBooking.guestInfo.email}</p>
+              </div>
             </div>
           </BookingSection>
 
-
-          {/* Booking Terms */}
-          <BookingSection
-            title='Booking conditions'>
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <div className="space-y-3 text-sm text-gray-600">
-                <p>
-                  Check-in is from 3:00 PM and check-out is until 12:00 PM.
+          {/* Booking Policies Section */}
+          <BookingSection title="Booking Policies" className="mb-4">
+            <div className="row">
+              <div className="col-md-6">
+                <h6 className="fw-semibold mb-3">Check-in/Check-out</h6>
+                <ul className="list-unstyled">
+                  <li className="mb-2">
+                    <Clock size={16} className="text-primary me-2" />
+                    Check-in: 3:00 PM onwards
+                  </li>
+                  <li>
+                    <Clock size={16} className="text-primary me-2" />
+                    Check-out: Before 12:00 PM
+                  </li>
+                </ul>
+              </div>
+              
+              <div className="col-md-6">
+                <h6 className="fw-semibold mb-3">Cancellation Policy</h6>
+                <p className="mb-2">
+                  Free cancellation up to 24 hours before check-in.
                 </p>
-                <p>
-                  Free cancellation is available up to 24 hours prior to check-in.
-                </p>
-                <p>
-                  Please present your ID card or passport upon check-in.
+                <p className="text-muted small">
+                  Please bring your ID card or passport for check-in.
                 </p>
               </div>
             </div>
-
           </BookingSection>
-
         </div>
 
-        {/* Payment Summary */}
-        <BookingSection title='Booking Summary'>
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-md p-6 sticky top-8">
-
-              <div className="space-y-4 mb-6">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Room Type</span>
-                  <span className="font-medium">{currentBooking.roomName}</span>
-                </div>
-
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Check-in Date</span>
-                  <span className="font-medium">
-                    {formatDate(currentBooking.checkIn)}
-                  </span>
-                </div>
-
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Check-out Date</span>
-                  <span className="font-medium">
-                    {formatDate(currentBooking.checkOut)}
-                  </span>
-                </div>
-
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Total Nights</span>
-                  <span className="font-medium">{currentBooking.nights} nights</span>
-                </div>
-
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Total Guests</span>
-                  <span className="font-medium">{currentBooking.guests} guests</span>
-                </div>
-
-                <hr />
-
-                <div className="flex justify-between items-center">
-                  <span></span>
-                  <span className="font-medium">
-                    {formatPrice(currentBooking.totalPrice / currentBooking.nights)} x {currentBooking.nights}
-                  </span>
-                </div>
-
-                <hr />
-
-                <div className="flex justify-between items-center text-lg">
-                  <span className="font-semibold">Total Price</span>
-                  <span className="font-bold text-primary-600">
-                    {formatPrice(currentBooking.totalPrice)}
-                  </span>
-                </div>
+        {/* Right Column - Booking Summary */}
+        <div className="col-lg-4">
+          <BookingSection title="Booking Summary" className="sticky-top">
+            {/* Summary Details */}
+            <div className="mb-4">
+              <div className="d-flex justify-content-between mb-3">
+                <span className="text-muted">Room Type</span>
+                <span className="fw-medium">{currentBooking.roomName}</span>
               </div>
-              <br />
 
-              <div className="space-y-3">
-                <Link
-                  href="/booking/payment"
-                  className="btn-primary text-center block"
-                >
-                  Proceed with payment
-                </Link>
+              <div className="d-flex justify-content-between mb-3">
+                <span className="text-muted">Check-in</span>
+                <span className="fw-medium">{formatDate(currentBooking.checkIn)}</span>
+              </div>
 
+              <div className="d-flex justify-content-between mb-3">
+                <span className="text-muted">Check-out</span>
+                <span className="fw-medium">{formatDate(currentBooking.checkOut)}</span>
+              </div>
+
+              <div className="d-flex justify-content-between mb-3">
+                <span className="text-muted">Nights</span>
+                <span className="fw-medium">{currentBooking.nights} nights</span>
+              </div>
+
+              <div className="d-flex justify-content-between mb-3">
+                <span className="text-muted">Guests</span>
+                <span className="fw-medium">{currentBooking.guests} guests</span>
+              </div>
+
+              <hr className="my-3" />
+
+              <div className="d-flex justify-content-between mb-3">
+                <span className="text-muted">Room Rate</span>
+                <span className="fw-medium">
+                  {formatPrice(currentBooking.totalPrice / currentBooking.nights)} × {currentBooking.nights}
+                </span>
+              </div>
+
+              <hr className="my-3" />
+
+              <div className="d-flex justify-content-between">
+                <span className="h5 mb-0">Total Price</span>
+                <span className="h5 mb-0 text-primary">
+                  {formatPrice(currentBooking.totalPrice)}
+                </span>
               </div>
             </div>
-          </div>
-        </BookingSection>
+
+            {/* Action Buttons */}
+            <div className="d-grid gap-2">
+              <Link
+                href="/booking/payment"
+                className="btn btn-primary btn-lg d-flex align-items-center justify-content-center gap-2"
+              >
+                <CreditCard size={20} />
+                Proceed to Payment
+              </Link>
+            </div>
+
+            {/* Security Notice */}
+            <div className="mt-3">
+              <small className="text-muted">
+                <i className="bi bi-shield-check me-1"></i>
+                Your payment information is secure and encrypted
+              </small>
+            </div>
+          </BookingSection>
+        </div>
       </div>
-    </div >
+    </div>
   )
 }
 

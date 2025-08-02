@@ -1,3 +1,4 @@
+// src/app/register/page.tsx - Bootstrap version
 'use client'
 
 import { useState } from 'react'
@@ -31,7 +32,7 @@ const RegisterPage = () => {
     setRegisterError('')
     
     if (data.password !== data.confirmPassword) {
-      setRegisterError('รหัสผ่านไม่ตรงกัน')
+      setRegisterError('Passwords do not match')
       return
     }
 
@@ -51,234 +52,214 @@ const RegisterPage = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-1/2">
-        <div className="flex justify-center">
-          <UserPlus />
-        </div>
-        <h2 className="text-center">
-          Register
-        </h2>
-
-        <div className="bg-white py-8 px-4 shadow-lg rounded-lg sm:px-10">
-          {registerError && (
-            <div className="mb-6 p-3 bg-red-50 border border-red-200 rounded-lg">
-              <div className="flex items-center">
-                <AlertCircle className="w-4 h-4 text-red-600 mr-2" />
-                <p className="text-red-700 text-sm">{registerError}</p>
-              </div>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            <div>
-              <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 text-center">
-                First Name
-              </label>
-              <div className="mt-1 flex justify-center">
-                <div className="relative w-80">
-                  <input
-                    {...register('firstName', {
-                      required: 'Please enter your first name',
-                      minLength: {
-                        value: 2,
-                        message: 'First name must be at least 2 characters'
-                      }
-                    })}
-                    type="text"
-                    className="input-field pr-10 w-full"
-                    placeholder="John"
-                  />
+    <div className="min-vh-100 d-flex align-items-center bg-light">
+      <div className="container">
+        <div className="row justify-content-center">
+          <div className="col-md-6 col-lg-5">
+            <div className="card shadow">
+              <div className="card-body p-4">
+                <div className="text-center mb-4">
+                  <UserPlus className="mb-3" size={40} />
+                  <h1 className="h3 mb-2">Register</h1>
+                  <p className="text-muted">
+                    Create your account to start booking
+                  </p>
                 </div>
-              </div>
-              {errors.firstName && (
-                <p className="error-text text-center">{errors.firstName.message}</p>
-              )}
-            </div>
 
-            <div>
-              <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 text-center">
-                Surname
-              </label>
-              <div className="mt-1 flex justify-center">
-                <div className="relative w-80">
-                  <input
-                    {...register('lastName', {
-                      required: 'Please enter your surname',
-                      minLength: {
-                        value: 2,
-                        message: 'Surname must be at least 2 characters'
-                      }
-                    })}
-                    type="text"
-                    className="input-field pr-10 w-full"
-                    placeholder="Doe"
-                  />
-                </div>
-              </div>
-              {errors.lastName && (
-                <p className="error-text text-center">{errors.lastName.message}</p>
-              )}
-            </div>
-
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 text-center">
-                Email
-              </label>
-              <div className="mt-1 flex justify-center">
-                <div className="relative w-80">
-                  <input
-                    {...register('email', {
-                      required: 'Please enter your email address',
-                      pattern: {
-                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                        message: 'Invalid email address'
-                      }
-                    })}
-                    type="email"
-                    className="input-field pr-10 w-full"
-                    placeholder="example@email.com"
-                  />
-                </div>
-              </div>
-              {errors.email && (
-                <p className="error-text text-center">{errors.email.message}</p>
-              )}
-            </div>
-
-            <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700 text-center">
-                Phone Number
-              </label>
-              <div className="mt-1 flex justify-center">
-                <div className="relative w-80">
-                  <input
-                    {...register('phone', {
-                      required: 'Please enter your phone number',
-                      pattern: {
-                        value: /^[0-9-+().\s]{10,}$/,
-                        message: 'Invalid phone number'
-                      }
-                    })}
-                    type="tel"
-                    className="input-field pr-10 w-full"
-                    placeholder="1234567890"
-                  />
-                </div>
-              </div>
-              {errors.phone && (
-                <p className="error-text text-center">{errors.phone.message}</p>
-              )}
-            </div>
-
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 text-center">
-                Password
-              </label>
-              <div className="mt-1 flex justify-center">
-                <div className="relative w-80">
-                  <input
-                    {...register('password', {
-                      required: 'Please enter your password',
-                      minLength: {
-                        value: 6,
-                        message: 'Password must be at least 6 characters.'
-                      }
-                    })}
-                    type={showPassword ? 'text' : 'password'}
-                    className="input-field pr-10 w-full"
-                    placeholder="Password"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-transparent border-0"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="w-4 h-4" />
-                    ) : (
-                      <Eye className="w-4 h-4" />
-                    )}
-                  </button>
-                </div>
-              </div>
-              {errors.password && (
-                <p className="error-text text-center">{errors.password.message}</p>
-              )}
-            </div>
-
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 text-center">
-                Confirm Password
-              </label>
-              <div className="mt-1 flex justify-center">
-                <div className="relative w-80">
-                  <input
-                    {...register('confirmPassword', {
-                      required: 'Please confirm your password',
-                      validate: (value) => value === password || 'Passwords do not match'
-                    })}
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    className="input-field pr-10 w-full"
-                    placeholder="Confirm Password"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-transparent border-0"
-                  >
-                    {showConfirmPassword ? (
-                      <EyeOff className="w-4 h-4" />
-                    ) : (
-                      <Eye className="w-4 h-4" />
-                    )}
-                  </button>
-                </div>
-              </div>
-              {errors.confirmPassword && (
-                <p className="error-text text-center">{errors.confirmPassword.message}</p>
-              )}
-            </div>
-
-            <br />
-
-            <div className="flex justify-center">
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="btn-primary w-80"
-              >
-                {isLoading ? (
-                  <div className="flex items-center justify-center">
-                    <div className="loading-spinner w-5 h-5 mr-2"></div>
-                    Registering User...
+                {/* Error Alert */}
+                {registerError && (
+                  <div className="alert alert-danger d-flex align-items-center" role="alert">
+                    <AlertCircle size={16} className="me-2" />
+                    {registerError}
                   </div>
-                ) : (
-                  'Register'
                 )}
-              </button>
+
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <div className="row">
+                    {/* First Name */}
+                    <div className="col-md-6 mb-3">
+                      <label className="form-label">First Name</label>
+                      <input
+                        {...register('firstName', {
+                          required: 'Please enter your first name',
+                          minLength: {
+                            value: 2,
+                            message: 'First name must be at least 2 characters'
+                          }
+                        })}
+                        type="text"
+                        className={`form-control ${errors.firstName ? 'is-invalid' : ''}`}
+                        placeholder="John"
+                      />
+                      {errors.firstName && (
+                        <div className="invalid-feedback">
+                          {errors.firstName.message}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Last Name */}
+                    <div className="col-md-6 mb-3">
+                      <label className="form-label">Surname</label>
+                      <input
+                        {...register('lastName', {
+                          required: 'Please enter your surname',
+                          minLength: {
+                            value: 2,
+                            message: 'Surname must be at least 2 characters'
+                          }
+                        })}
+                        type="text"
+                        className={`form-control ${errors.lastName ? 'is-invalid' : ''}`}
+                        placeholder="Doe"
+                      />
+                      {errors.lastName && (
+                        <div className="invalid-feedback">
+                          {errors.lastName.message}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Email */}
+                  <div className="mb-3">
+                    <label className="form-label">Email</label>
+                    <input
+                      {...register('email', {
+                        required: 'Please enter your email address',
+                        pattern: {
+                          value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                          message: 'Invalid email address'
+                        }
+                      })}
+                      type="email"
+                      className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+                      placeholder="example@email.com"
+                    />
+                    {errors.email && (
+                      <div className="invalid-feedback">
+                        {errors.email.message}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Phone */}
+                  <div className="mb-3">
+                    <label className="form-label">Phone Number</label>
+                    <input
+                      {...register('phone', {
+                        required: 'Please enter your phone number',
+                        pattern: {
+                          value: /^[0-9-+().\s]{10,}$/,
+                          message: 'Invalid phone number'
+                        }
+                      })}
+                      type="tel"
+                      className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
+                      placeholder="1234567890"
+                    />
+                    {errors.phone && (
+                      <div className="invalid-feedback">
+                        {errors.phone.message}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Password */}
+                  <div className="mb-3">
+                    <label className="form-label">Password</label>
+                    <div className="input-group">
+                      <input
+                        {...register('password', {
+                          required: 'Please enter your password',
+                          minLength: {
+                            value: 6,
+                            message: 'Password must be at least 6 characters.'
+                          }
+                        })}
+                        type={showPassword ? 'text' : 'password'}
+                        className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+                        placeholder="Password"
+                      />
+                      <button
+                        type="button"
+                        className="btn btn-outline-secondary"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                      </button>
+                      {errors.password && (
+                        <div className="invalid-feedback">
+                          {errors.password.message}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Confirm Password */}
+                  <div className="mb-3">
+                    <label className="form-label">Confirm Password</label>
+                    <div className="input-group">
+                      <input
+                        {...register('confirmPassword', {
+                          required: 'Please confirm your password',
+                          validate: (value) => value === password || 'Passwords do not match'
+                        })}
+                        type={showConfirmPassword ? 'text' : 'password'}
+                        className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`}
+                        placeholder="Confirm Password"
+                      />
+                      <button
+                        type="button"
+                        className="btn btn-outline-secondary"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      >
+                        {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                      </button>
+                      {errors.confirmPassword && (
+                        <div className="invalid-feedback">
+                          {errors.confirmPassword.message}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Submit Button */}
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="btn btn-primary w-100 py-2"
+                  >
+                    {isLoading ? (
+                      <div className="d-flex align-items-center justify-content-center">
+                        <div className="spinner-border spinner-border-sm me-2" role="status">
+                          <span className="visually-hidden">Loading...</span>
+                        </div>
+                        Registering User...
+                      </div>
+                    ) : (
+                      'Register'
+                    )}
+                  </button>
+                </form>
+
+                {/* Links */}
+                <div className="mt-4 text-center">
+                  <p className="text-muted mb-0">
+                    Have an account?{' '}
+                    <Link href="/login" className="text-primary text-decoration-none">
+                      Login
+                    </Link>
+                  </p>
+                </div>
+
+                <div className="mt-3 text-center">
+                  <Link href="/" className="text-muted text-decoration-none small">
+                    ← Go Home
+                  </Link>
+                </div>
+              </div>
             </div>
-          </form>
-
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
-              Have an account?{' '}
-              <Link
-                href="/login"
-                className="font-medium text-primary-600 hover:text-primary-500 transition-colors duration-200"
-              >
-                Login
-              </Link>
-            </p>
-          </div>
-
-          <div className="mt-4 text-center">
-            <Link
-              href="/"
-              className="text-sm text-gray-600 hover:text-primary-600 transition-colors duration-200"
-            >
-              ← Go Home
-            </Link>
           </div>
         </div>
       </div>
