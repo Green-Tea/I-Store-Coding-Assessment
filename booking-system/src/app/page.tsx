@@ -331,11 +331,11 @@ const HomePage = () => {
         ) : (
           <div className="text-center py-5">
             <div className="mb-4">
-              <HomeIcon size={64} className="text-muted" />
+              <Search size={64} className="text-muted" />
             </div>
             <h3 className="h4 mb-2">Start Your Search</h3>
             <p className="text-muted">
-              Use the search bar above to find your perfect room
+              Use the search bar above to find your room
             </p>
           </div>
         )}
