@@ -6,26 +6,33 @@
 /* Base styles */
 html {
   scroll-behavior: smooth;
+  /* Remove the custom background color since we're using Bootstrap's bg-light */
 }
 
+/* Ensure full height and no gaps */
 html, body {
   min-height: 100%;
 }
 
 body {
+  /* Bootstrap's bg-light will handle the background */
   margin: 0;
   padding: 0;
 }
 
+/* Bootstrap customizations and overrides */
 :root {
+  /* Override Bootstrap primary color to match your theme */
   --bs-primary: #2563eb;
   --bs-primary-rgb: 37, 99, 235;
 }
 
+/* Section spacing utilities */
 .mb-4 {
   margin-bottom: 1.5rem !important;
 }
 
+/* Enhanced Bootstrap button styles */
 .btn {
   border-radius: 0.5rem;
   font-weight: 500;
@@ -74,10 +81,12 @@ body {
   color: white;
 }
 
+/* Enhanced Bootstrap card styles */
 .card {
   border-radius: 0.75rem;
 }
 
+/* Room card specific styles and hover effect */
 .room-card {
   transition: all 0.3s ease;
   cursor: pointer;
@@ -88,21 +97,26 @@ body {
   transform: translateY(-4px);
 }
 
+/* Override Bootstrap badge styles for better look */
 .room-card .badge {
   font-weight: 500;
 }
 
+/* Enhanced Bootstrap form controls */
 .form-control:focus,
 .form-select:focus {
   border-color: #2563eb;
   box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.25);
 }
 
+/* Amenity tag styles - Bootstrap badges */
 .amenity-tag {
+  /* Now use Bootstrap badge classes instead */
   font-size: 0.75rem;
   font-weight: 500;
 }
 
+/* Keep your custom animations */
 @keyframes fadeIn {
   0% { opacity: 0; }
   100% { opacity: 1; }
@@ -127,6 +141,7 @@ body {
   animation: slideUp 0.3s ease-out;
 }
 
+/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -144,6 +159,29 @@ body {
   background: #a8a8a8;
 }
 
+/* Hero Section Gradient */
+.bg-gradient {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+}
+
+/* Custom form-range styling */
+.form-range::-webkit-slider-thumb {
+  background: #2563eb;
+}
+
+.form-range::-moz-range-thumb {
+  background: #2563eb;
+}
+
+.form-range:focus::-webkit-slider-thumb {
+  box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.25);
+}
+
+/* Search input focus state */
+.form-control:focus {
+  box-shadow: none;
+  border-color: #2563eb;
+}
 .carousel {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
@@ -178,6 +216,7 @@ body {
   margin: 0 4px;
 }
 
+/* Ensure Next.js Image works well with Bootstrap carousel */
 .carousel-item img {
   object-fit: cover;
   width: 100%;
@@ -188,6 +227,7 @@ body {
 }
 
 .react-datepicker__input-container input {
+  /* Apply Bootstrap form-control styles */
   display: block;
   width: 100%;
   padding: 0.375rem 0.75rem;
@@ -242,5 +282,6 @@ body {
   background-color: #e9ecef;
 }
 
+/* Utility classes for migration period */
 .w-50 { width: 50% !important; }
 .min-vh-100 { min-height: 100vh !important; }
