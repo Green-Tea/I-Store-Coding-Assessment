@@ -47,12 +47,11 @@ const LoginPage = () => {
                   </p>
                 </div>
 
-                {/* Demo Accounts Info */}
+                {/* Demo Account Info */}
                 <div className="alert alert-info" role="alert">
-                  <h6 className="alert-heading">Demo Accounts</h6>
+                  <h6 className="alert-heading">Demo Account</h6>
                   <small>
                     <div>admin@example.com / admin123</div>
-                    <div>john@example.com / john123</div>
                   </small>
                 </div>
 

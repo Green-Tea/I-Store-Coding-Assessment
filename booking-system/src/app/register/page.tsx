@@ -1,4 +1,3 @@
-// src/app/register/page.tsx - Bootstrap version
 'use client'
 
 import { useState } from 'react'

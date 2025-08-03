@@ -1,4 +1,3 @@
-// src/components/ui/RoomCard.tsx - Bootstrap version
 import Link from 'next/link'
 import { Users, MapPin, Star } from 'lucide-react'
 import { Room } from '@/types'

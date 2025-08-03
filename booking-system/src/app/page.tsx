@@ -1,4 +1,3 @@
-// src/app/page.tsx - Improved search section design with auto-scroll
 'use client'
 
 import { useState, useEffect, useRef, JSX } from 'react'
@@ -18,7 +17,6 @@ const HomePage = () => {
   const [searchResults, setSearchResults] = useState<Room[]>([])
   const [hasSearched, setHasSearched] = useState(false)
   
-  // Ref for the results section
   const resultsRef = useRef<HTMLDivElement>(null)
 
   const amenityIcons: { [key: string]: JSX.Element } = {
@@ -38,14 +36,13 @@ const HomePage = () => {
     setRooms(roomsData.rooms as Room[])
   }, [])
 
-  // Auto-search when filters change (but only if already searched)
   useEffect(() => {
     if (hasSearched && rooms.length > 0) {
       performSearch()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [priceRange, selectedAmenities, hasSearched])
 
-  // Function to scroll to results
   const scrollToResults = () => {
     if (resultsRef.current) {
       setTimeout(() => {
@@ -116,7 +113,7 @@ const HomePage = () => {
 
   return (
     <>
-      {/* Hero Section with Search */}
+      {/* Hero Section */}
       <div className="bg-primary bg-gradient text-white py-5 mb-5">
         <div className="container">
           <div className="row justify-content-center">

@@ -15,12 +15,11 @@ const Navbar = () => {
 
     return (
         <nav style={{
-            backgroundColor: "#0D98BA",
-            height: "5%",
+            backgroundColor: "#2563eb",
+            height: "5rem",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            marginBottom: "1rem",
             padding: "0 1rem"
         }}>
             <div style={{ display: "flex", alignItems: "center" }}>
@@ -29,7 +28,7 @@ const Navbar = () => {
                     style={{ background: "transparent", border: "0px", display: "flex", alignItems: "center" }}
                 >
                     <Home size={"2rem"} color="white" />
-                    <h2 style={{ color: "white", marginLeft: "0.5rem" }}>Room Booking System</h2>
+                    <h1 style={{ color: "white", marginLeft: "0.5rem" }}>Room Booking System</h1>
                 </button>
             </div>
 

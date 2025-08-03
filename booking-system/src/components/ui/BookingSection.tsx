@@ -1,4 +1,3 @@
-// src/components/ui/BookingSection.tsx
 import { ReactNode } from 'react'
 
 interface BookingSectionProps {

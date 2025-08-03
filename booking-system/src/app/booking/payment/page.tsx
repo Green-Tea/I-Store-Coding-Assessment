@@ -1,4 +1,3 @@
-// src/app/booking/payment/page.tsx - Bootstrap version with improved styling
 'use client'
 
 import { useState, useEffect } from 'react'

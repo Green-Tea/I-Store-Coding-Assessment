@@ -1,4 +1,3 @@
-// src/app/booking/receipt/page.tsx - Bootstrap version with improved spacing
 'use client'
 
 import { useEffect, useState } from 'react'

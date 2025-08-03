@@ -1,4 +1,3 @@
-// src/app/rooms/[id]/page.tsx - Updated with Bootstrap carousel
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -137,7 +136,7 @@ const RoomDetailPage = () => {
       <div className="container">
         <div className="row g-4">
           <div className="col-lg-6">
-            {/* Bootstrap Carousel for Images */}
+            {/* Carousel for Images */}
             {room.images && room.images.length > 0 && (
               <div id="roomCarousel" className="carousel slide mb-4" data-bs-ride="carousel">
                 {/* Carousel Indicators */}

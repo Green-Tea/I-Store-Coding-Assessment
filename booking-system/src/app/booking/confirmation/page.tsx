@@ -1,4 +1,3 @@
-// src/app/booking/confirmation/page.tsx - Bootstrap version with vertical gaps
 'use client'
 
 import { useEffect, useState } from 'react'

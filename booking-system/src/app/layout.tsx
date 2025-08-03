@@ -19,7 +19,7 @@ export default function RootLayout({
       <body className="m-0 bg-light">
         <BootstrapClient />
         <Navbar />
-        <main className="container-fluid px-3 bg-light min-vh-100">
+        <main className="bg-light min-vh-100">
           {children}
         </main>
       </body>

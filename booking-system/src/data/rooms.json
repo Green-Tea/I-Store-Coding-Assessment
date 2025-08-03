@@ -11,7 +11,8 @@
       "images": [
         "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800",
         "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800",
-        "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800"
+        "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800",
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800"
       ],
       "capacity": 2,
       "amenities": ["WiFi", "TV", "Air Conditioning", "Mini Fridge", "Ocean View", "Balcony", "Bathtub"],
@@ -19,7 +20,9 @@
       "bed_type": "King Bed",
       "availability": [
         "2025-07-29", "2025-07-30", "2025-07-31", "2025-08-01", "2025-08-03",
-        "2025-08-04", "2025-08-05", "2025-08-07", "2025-08-08", "2025-08-09"
+        "2025-08-04", "2025-08-05", "2025-08-07", "2025-08-08", "2025-08-09",
+        "2025-08-10", "2025-08-11", "2025-08-12", "2025-08-13", "2025-08-14",
+        "2025-08-15", "2025-08-16"
       ]
     },
     {
@@ -31,14 +34,18 @@
       "description": "Comfortable standard rooms, perfect for a simple getaway.",
       "image_url": "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800",
       "images": [
-        "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800"
+        "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800",
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800",
+        "https://images.unsplash.com/photo-1592229505726-cf121663d0d9?w=800"
       ],
       "capacity": 2,
       "amenities": ["WiFi", "TV", "Air Conditioning", "Balcony", "Bathtub"],
       "size": "35 sqm",
       "bed_type": "Double Bed",
       "availability": [
-        "2025-07-29", "2025-07-30", "2025-07-31", "2025-08-01", "2025-08-02"
+        "2025-07-29", "2025-07-30", "2025-07-31", "2025-08-01", "2025-08-02",
+        "2025-08-10", "2025-08-11", "2025-08-12", "2025-08-13", "2025-08-14",
+        "2025-08-15", "2025-08-16"
       ]
     },
     {
@@ -57,7 +64,9 @@
       "size": "55 sqm",
       "bed_type": "2 Double Beds",
       "availability": [
-        "2025-07-30", "2025-07-31", "2025-08-02", "2025-08-03", "2025-08-04"
+        "2025-07-30", "2025-07-31", "2025-08-02", "2025-08-03", "2025-08-04",
+        "2025-08-10", "2025-08-11", "2025-08-12", "2025-08-13", "2025-08-14",
+        "2025-08-15", "2025-08-16"
       ]
     }
   ]
